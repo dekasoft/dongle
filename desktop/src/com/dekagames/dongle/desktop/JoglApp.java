@@ -2,7 +2,6 @@ package com.dekagames.dongle.desktop;
 
 import com.dekagames.dongle.*;
 import com.dekagames.dongle.Graphics;
-import com.jogamp.opengl.JoglVersion;
 import com.jogamp.opengl.util.FPSAnimator;
 
 import javax.media.opengl.GLAutoDrawable;

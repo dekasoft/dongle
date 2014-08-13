@@ -1,0 +1,486 @@
+{
+width="512" height="512" 
+    {
+    name="sprites" 
+        {
+        name="sprMan" 
+            {
+            x="1" y="213" w="57" h="72" pivotX="-26" pivotY="-26" 
+            }
+            {
+            x="1" y="1" w="62" h="69" pivotX="-26" pivotY="-29" 
+            }
+            {
+            x="65" y="1" w="64" h="66" pivotX="-26" pivotY="-31" 
+            }
+            {
+            x="131" y="1" w="63" h="66" pivotX="-25" pivotY="-30" 
+            }
+            {
+            x="1" y="72" w="62" h="69" pivotX="-23" pivotY="-28" 
+            }
+            {
+            x="1" y="359" w="56" h="70" pivotX="-26" pivotY="-27" 
+            }
+            {
+            x="65" y="69" w="53" h="70" pivotX="-26" pivotY="-26" 
+            }
+            {
+            x="1" y="431" w="55" h="69" pivotX="-24" pivotY="-28" 
+            }
+            {
+            x="1" y="143" w="62" h="68" pivotX="-20" pivotY="-30" 
+            }
+            {
+            x="1" y="287" w="58" h="70" pivotX="-22" pivotY="-28" 
+            }
+            {
+            x="65" y="141" w="52" h="71" pivotX="-25" pivotY="-26" 
+            }
+        }
+    }
+    {
+    name="fonts" 
+        {
+        name="fntComic" 
+            {
+            glyph=" " x="167" y="500" w="4" h="4" lsb="1.0" originY="1" advance="14.0" 
+            }
+            {
+            glyph="A" x="175" y="102" w="26" h="29" lsb="2.46875" originY="25" advance="24.0" 
+            }
+            {
+            glyph="B" x="173" y="297" w="22" h="31" lsb="3.125" originY="27" advance="21.0" 
+            }
+            {
+            glyph="C" x="120" y="234" w="25" h="30" lsb="1.8125" originY="26" advance="20.0" 
+            }
+            {
+            glyph="D" x="120" y="102" w="25" h="32" lsb="3.296875" originY="27" advance="24.0" 
+            }
+            {
+            glyph="E" x="120" y="136" w="24" h="32" lsb="2.515625" originY="27" advance="21.0" 
+            }
+            {
+            glyph="F" x="120" y="396" w="23" h="32" lsb="2.5" originY="27" advance="20.0" 
+            }
+            {
+            glyph="G" x="484" y="1" w="27" h="32" lsb="1.625" originY="27" advance="22.0" 
+            }
+            {
+            glyph="H" x="423" y="34" w="28" h="32" lsb="2.8125" originY="27" advance="25.0" 
+            }
+            {
+            glyph="I" x="198" y="261" w="22" h="30" lsb="1.5625" originY="26" advance="18.0" 
+            }
+            {
+            glyph="J" x="423" y="69" w="26" h="31" lsb="1.875" originY="26" advance="22.0" 
+            }
+            {
+            glyph="K" x="147" y="198" w="23" h="31" lsb="2.734375" originY="26" advance="20.0" 
+            }
+            {
+            glyph="L" x="147" y="231" w="23" h="31" lsb="1.984375" originY="26" advance="18.0" 
+            }
+            {
+            glyph="M" x="196" y="33" w="32" h="31" lsb="2.15625" originY="26" advance="29.0" 
+            }
+            {
+            glyph="N" x="423" y="1" w="29" h="31" lsb="2.34375" originY="26" advance="27.0" 
+            }
+            {
+            glyph="O" x="391" y="33" w="30" h="30" lsb="1.96875" originY="26" advance="26.0" 
+            }
+            {
+            glyph="P" x="198" y="392" w="21" h="31" lsb="1.96875" originY="27" advance="18.0" 
+            }
+            {
+            glyph="Q" x="65" y="282" w="33" h="37" lsb="1.59375" originY="26" advance="29.0" 
+            }
+            {
+            glyph="R" x="120" y="462" w="24" h="30" lsb="2.484375" originY="26" advance="21.0" 
+            }
+            {
+            glyph="S" x="232" y="38" w="27" h="29" lsb="1.78125" originY="25" advance="23.0" 
+            }
+            {
+            glyph="T" x="210" y="69" w="28" h="30" lsb="1.15625" originY="26" advance="23.0" 
+            }
+            {
+            glyph="U" x="485" y="35" w="26" h="31" lsb="2.25" originY="26" advance="24.0" 
+            }
+            {
+            glyph="V" x="451" y="69" w="25" h="31" lsb="2.15625" originY="26" advance="22.0" 
+            }
+            {
+            glyph="W" x="65" y="321" w="38" h="31" lsb="1.8125" originY="26" advance="34.0" 
+            }
+            {
+            glyph="X" x="120" y="69" w="28" h="31" lsb="1.171875" originY="26" advance="24.0" 
+            }
+            {
+            glyph="Y" x="395" y="69" w="26" h="31" lsb="0.828125" originY="26" advance="21.0" 
+            }
+            {
+            glyph="Z" x="366" y="69" w="27" h="30" lsb="1.1875" originY="26" advance="23.0" 
+            }
+            {
+            glyph="a" x="392" y="133" w="22" h="23" lsb="1.90625" originY="18" advance="18.0" 
+            }
+            {
+            glyph="b" x="173" y="198" w="22" h="31" lsb="2.453125" originY="27" advance="20.0" 
+            }
+            {
+            glyph="c" x="222" y="265" w="20" h="24" lsb="1.578125" originY="19" advance="17.0" 
+            }
+            {
+            glyph="d" x="147" y="297" w="23" h="31" lsb="1.796875" originY="27" advance="19.0" 
+            }
+            {
+            glyph="e" x="462" y="133" w="22" h="22" lsb="1.75" originY="18" advance="18.0" 
+            }
+            {
+            glyph="f" x="173" y="429" w="20" h="33" lsb="1.5625" originY="27" advance="17.0" 
+            }
+            {
+            glyph="g" x="198" y="359" w="21" h="31" lsb="1.296875" originY="18" advance="18.0" 
+            }
+            {
+            glyph="h" x="173" y="363" w="22" h="31" lsb="2.6875" originY="27" advance="19.0" 
+            }
+            {
+            glyph="i" x="108" y="214" w="10" h="30" lsb="3.234375" originY="26" advance="9.0" 
+            }
+            {
+            glyph="j" x="100" y="462" w="17" h="39" lsb="0.0625" originY="26" advance="13.0" 
+            }
+            {
+            glyph="k" x="198" y="326" w="21" h="31" lsb="2.515625" originY="27" advance="18.0" 
+            }
+            {
+            glyph="l" x="105" y="321" w="9" h="31" lsb="3.15625" originY="27" advance="9.0" 
+            }
+            {
+            glyph="m" x="203" y="102" w="29" h="24" lsb="2.359375" originY="19" advance="26.0" 
+            }
+            {
+            glyph="n" x="222" y="291" w="20" h="24" lsb="2.09375" originY="19" advance="17.0" 
+            }
+            {
+            glyph="o" x="313" y="189" w="21" h="22" lsb="1.578125" originY="18" advance="17.0" 
+            }
+            {
+            glyph="p" x="222" y="133" w="20" h="32" lsb="2.265625" originY="19" advance="18.0" 
+            }
+            {
+            glyph="q" x="222" y="167" w="20" h="31" lsb="1.328125" originY="19" advance="17.0" 
+            }
+            {
+            glyph="r" x="222" y="466" w="19" h="23" lsb="2.34375" originY="18" advance="16.0" 
+            }
+            {
+            glyph="s" x="222" y="441" w="19" h="23" lsb="1.84375" originY="19" advance="16.0" 
+            }
+            {
+            glyph="t" x="462" y="102" w="20" h="29" lsb="1.40625" originY="24" advance="16.0" 
+            }
+            {
+            glyph="u" x="416" y="133" w="21" h="24" lsb="1.859375" originY="19" advance="17.0" 
+            }
+            {
+            glyph="v" x="267" y="189" w="21" h="23" lsb="1.359375" originY="19" advance="16.0" 
+            }
+            {
+            glyph="w" x="377" y="102" w="27" h="23" lsb="1.578125" originY="18" advance="23.0" 
+            }
+            {
+            glyph="x" x="293" y="133" w="24" h="23" lsb="1.34375" originY="19" advance="19.0" 
+            }
+            {
+            glyph="y" x="173" y="396" w="22" h="31" lsb="1.09375" originY="18" advance="18.0" 
+            }
+            {
+            glyph="z" x="439" y="133" w="21" h="24" lsb="1.796875" originY="19" advance="18.0" 
+            }
+            {
+            glyph="А" x="147" y="102" w="26" h="29" lsb="2.46875" originY="25" advance="24.0" 
+            }
+            {
+            glyph="Б" x="198" y="165" w="22" h="30" lsb="2.859375" originY="26" advance="20.0" 
+            }
+            {
+            glyph="В" x="173" y="165" w="22" h="31" lsb="3.125" originY="27" advance="21.0" 
+            }
+            {
+            glyph="Г" x="147" y="165" w="23" h="31" lsb="1.984375" originY="26" advance="18.0" 
+            }
+            {
+            glyph="Д" x="232" y="1" w="29" h="35" lsb="1.8125" originY="26" advance="25.0" 
+            }
+            {
+            glyph="Е" x="94" y="422" w="24" h="32" lsb="2.515625" originY="27" advance="21.0" 
+            }
+            {
+            glyph="Ё" x="365" y="1" w="24" h="39" lsb="2.515625" originY="34" advance="21.0" 
+            }
+            {
+            glyph="Ж" x="196" y="1" w="34" h="30" lsb="0.84375" originY="26" advance="28.0" 
+            }
+            {
+            glyph="З" x="173" y="133" w="23" h="30" lsb="1.421875" originY="26" advance="20.0" 
+            }
+            {
+            glyph="И" x="308" y="69" w="27" h="30" lsb="2.421875" originY="26" advance="25.0" 
+            }
+            {
+            glyph="Й" x="65" y="422" w="27" h="38" lsb="2.421875" originY="34" advance="25.0" 
+            }
+            {
+            glyph="К" x="120" y="430" w="24" h="30" lsb="2.953125" originY="26" advance="21.0" 
+            }
+            {
+            glyph="Л" x="337" y="69" w="27" h="30" lsb="1.078125" originY="26" advance="24.0" 
+            }
+            {
+            glyph="М" x="263" y="1" w="32" h="31" lsb="2.15625" originY="26" advance="29.0" 
+            }
+            {
+            glyph="Н" x="454" y="1" w="28" h="32" lsb="2.8125" originY="27" advance="25.0" 
+            }
+            {
+            glyph="О" x="391" y="1" w="30" h="30" lsb="1.96875" originY="26" advance="26.0" 
+            }
+            {
+            glyph="П" x="263" y="34" w="32" h="31" lsb="2.046875" originY="27" advance="30.0" 
+            }
+            {
+            glyph="Р" x="198" y="293" w="21" h="31" lsb="1.96875" originY="27" advance="18.0" 
+            }
+            {
+            glyph="С" x="120" y="170" w="25" h="30" lsb="1.8125" originY="26" advance="20.0" 
+            }
+            {
+            glyph="Т" x="180" y="69" w="28" h="30" lsb="1.15625" originY="26" advance="23.0" 
+            }
+            {
+            glyph="У" x="120" y="202" w="25" h="30" lsb="1.3125" originY="26" advance="21.0" 
+            }
+            {
+            glyph="Ф" x="147" y="133" w="24" h="30" lsb="1.8125" originY="26" advance="20.0" 
+            }
+            {
+            glyph="Х" x="150" y="69" w="28" h="31" lsb="1.171875" originY="26" advance="24.0" 
+            }
+            {
+            glyph="Ц" x="330" y="33" w="29" h="34" lsb="2.34375" originY="26" advance="26.0" 
+            }
+            {
+            glyph="Ч" x="198" y="133" w="22" h="30" lsb="2.046875" originY="26" advance="20.0" 
+            }
+            {
+            glyph="Ш" x="330" y="1" w="33" h="30" lsb="1.953125" originY="26" advance="30.0" 
+            }
+            {
+            glyph="Щ" x="65" y="246" w="36" h="34" lsb="1.953125" originY="26" advance="32.0" 
+            }
+            {
+            glyph="Ъ" x="454" y="35" w="29" h="30" lsb="0.96875" originY="26" advance="25.0" 
+            }
+            {
+            glyph="Ы" x="65" y="354" w="38" h="30" lsb="2.859375" originY="26" advance="35.0" 
+            }
+            {
+            glyph="Ь" x="173" y="464" w="22" h="30" lsb="2.859375" originY="26" advance="20.0" 
+            }
+            {
+            glyph="Э" x="120" y="266" w="25" h="30" lsb="1.75" originY="26" advance="22.0" 
+            }
+            {
+            glyph="Ю" x="65" y="214" w="41" h="30" lsb="1.640625" originY="26" advance="37.0" 
+            }
+            {
+            glyph="Я" x="120" y="298" w="25" h="30" lsb="0.78125" originY="26" advance="21.0" 
+            }
+            {
+            glyph="а" x="343" y="133" w="22" h="23" lsb="1.90625" originY="18" advance="18.0" 
+            }
+            {
+            glyph="б" x="173" y="231" w="22" h="31" lsb="1.578125" originY="27" advance="17.0" 
+            }
+            {
+            glyph="в" x="222" y="392" w="20" h="22" lsb="2.46875" originY="18" advance="17.0" 
+            }
+            {
+            glyph="г" x="336" y="189" w="19" h="23" lsb="2.515625" originY="19" advance="16.0" 
+            }
+            {
+            glyph="д" x="234" y="102" w="25" h="27" lsb="0.890625" originY="19" advance="20.0" 
+            }
+            {
+            glyph="е" x="486" y="133" w="22" h="22" lsb="1.75" originY="18" advance="18.0" 
+            }
+            {
+            glyph="ё" x="173" y="264" w="22" h="31" lsb="1.75" originY="27" advance="18.0" 
+            }
+            {
+            glyph="ж" x="406" y="102" w="26" h="23" lsb="1.421875" originY="19" advance="23.0" 
+            }
+            {
+            glyph="з" x="357" y="189" w="17" h="23" lsb="2.0625" originY="19" advance="15.0" 
+            }
+            {
+            glyph="и" x="367" y="133" w="23" h="22" lsb="2.140625" originY="18" advance="21.0" 
+            }
+            {
+            glyph="й" x="147" y="264" w="23" h="31" lsb="2.140625" originY="27" advance="21.0" 
+            }
+            {
+            glyph="к" x="222" y="343" w="20" h="23" lsb="2.4375" originY="19" advance="16.0" 
+            }
+            {
+            glyph="л" x="484" y="102" w="25" h="23" lsb="0.84375" originY="19" advance="21.0" 
+            }
+            {
+            glyph="м" x="292" y="102" w="28" h="23" lsb="1.0625" originY="19" advance="24.0" 
+            }
+            {
+            glyph="н" x="319" y="133" w="22" h="23" lsb="1.5625" originY="19" advance="18.0" 
+            }
+            {
+            glyph="о" x="365" y="42" w="24" h="23" lsb="1.46875" originY="19" advance="20.0" 
+            }
+            {
+            glyph="п" x="244" y="165" w="22" h="22" lsb="3.765625" originY="18" advance="21.0" 
+            }
+            {
+            glyph="р" x="198" y="458" w="20" h="32" lsb="2.265625" originY="19" advance="18.0" 
+            }
+            {
+            glyph="с" x="222" y="317" w="20" h="24" lsb="1.578125" originY="19" advance="17.0" 
+            }
+            {
+            glyph="т" x="222" y="239" w="20" h="24" lsb="1.40625" originY="19" advance="16.0" 
+            }
+            {
+            glyph="у" x="173" y="330" w="22" h="31" lsb="1.09375" originY="18" advance="18.0" 
+            }
+            {
+            glyph="ф" x="297" y="1" w="31" h="32" lsb="1.71875" originY="19" advance="27.0" 
+            }
+            {
+            glyph="х" x="267" y="133" w="24" h="23" lsb="1.34375" originY="19" advance="19.0" 
+            }
+            {
+            glyph="ц" x="352" y="102" w="23" h="27" lsb="3.203125" originY="19" advance="20.0" 
+            }
+            {
+            glyph="ч" x="244" y="189" w="21" h="23" lsb="1.5625" originY="19" advance="18.0" 
+            }
+            {
+            glyph="ш" x="322" y="102" w="28" h="23" lsb="2.078125" originY="19" advance="25.0" 
+            }
+            {
+            glyph="щ" x="240" y="69" w="30" h="28" lsb="2.078125" originY="19" advance="26.0" 
+            }
+            {
+            glyph="ъ" x="434" y="102" w="26" h="23" lsb="0.625" originY="19" advance="21.0" 
+            }
+            {
+            glyph="ы" x="261" y="102" w="29" h="23" lsb="2.421875" originY="19" advance="26.0" 
+            }
+            {
+            glyph="ь" x="222" y="416" w="19" h="23" lsb="2.421875" originY="19" advance="16.0" 
+            }
+            {
+            glyph="э" x="222" y="368" w="20" h="22" lsb="2.09375" originY="18" advance="17.0" 
+            }
+            {
+            glyph="ю" x="272" y="69" w="34" h="24" lsb="1.703125" originY="20" advance="30.0" 
+            }
+            {
+            glyph="я" x="290" y="189" w="21" h="22" lsb="0.90625" originY="18" advance="17.0" 
+            }
+            {
+            glyph="#" x="65" y="462" w="33" h="31" lsb="0.5625" originY="27" advance="28.0" 
+            }
+            {
+            glyph="~" x="173" y="496" w="23" h="13" lsb="1.734375" originY="17" advance="20.0" 
+            }
+            {
+            glyph="0" x="120" y="330" w="24" h="31" lsb="1.34375" originY="27" advance="20.0" 
+            }
+            {
+            glyph="1" x="99" y="386" w="17" h="31" lsb="4.796875" originY="27" advance="20.0" 
+            }
+            {
+            glyph="2" x="244" y="133" w="21" h="30" lsb="3.0" originY="26" advance="20.0" 
+            }
+            {
+            glyph="3" x="198" y="197" w="22" h="30" lsb="2.703125" originY="26" advance="20.0" 
+            }
+            {
+            glyph="4" x="120" y="363" w="24" h="31" lsb="1.125" originY="27" advance="20.0" 
+            }
+            {
+            glyph="5" x="147" y="330" w="23" h="31" lsb="2.390625" originY="26" advance="20.0" 
+            }
+            {
+            glyph="6" x="147" y="396" w="22" h="32" lsb="2.453125" originY="27" advance="20.0" 
+            }
+            {
+            glyph="7" x="478" y="69" w="25" h="31" lsb="1.484375" originY="26" advance="20.0" 
+            }
+            {
+            glyph="8" x="198" y="229" w="22" h="30" lsb="2.234375" originY="26" advance="20.0" 
+            }
+            {
+            glyph="9" x="147" y="363" w="23" h="31" lsb="1.859375" originY="26" advance="20.0" 
+            }
+            {
+            glyph="." x="133" y="494" w="10" h="9" lsb="5.453125" originY="4" advance="14.0" 
+            }
+            {
+            glyph="," x="120" y="494" w="11" h="13" lsb="4.484375" originY="4" advance="14.0" 
+            }
+            {
+            glyph="(" x="100" y="282" w="15" h="37" lsb="2.140625" originY="27" advance="12.0" 
+            }
+            {
+            glyph=")" x="222" y="200" w="15" h="37" lsb="2.140625" originY="27" advance="12.0" 
+            }
+            {
+            glyph="-" x="147" y="500" w="18" h="9" lsb="4.53125" originY="12" advance="20.0" 
+            }
+            {
+            glyph="+" x="222" y="491" w="20" h="18" lsb="3.6875" originY="18" advance="20.0" 
+            }
+            {
+            glyph="*" x="198" y="492" w="21" h="18" lsb="1.109375" originY="27" advance="17.0" 
+            }
+            {
+            glyph="/" x="147" y="430" w="21" h="33" lsb="1.703125" originY="28" advance="17.0" 
+            }
+            {
+            glyph="/" x="147" y="465" w="21" h="33" lsb="1.703125" originY="28" advance="17.0" 
+            }
+            {
+            glyph="@" x="65" y="386" w="32" h="34" lsb="2.125" originY="28" advance="31.0" 
+            }
+            {
+            glyph="%" x="297" y="35" w="30" h="32" lsb="2.71875" originY="28" advance="27.0" 
+            }
+            {
+            glyph="!" x="103" y="246" w="9" h="32" lsb="2.296875" originY="27" advance="8.0" 
+            }
+            {
+            glyph="?" x="198" y="425" w="21" h="31" lsb="2.359375" originY="26" advance="19.0" 
+            }
+            {
+            glyph=":" x="376" y="189" w="10" h="22" lsb="5.859375" originY="20" advance="14.0" 
+            }
+            {
+            glyph=";" x="105" y="354" w="12" h="27" lsb="4.453125" originY="20" advance="14.0" 
+            }
+        }
+    }
+}

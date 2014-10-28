@@ -47,7 +47,7 @@ public class SkeletonModel {
 
     /**
      *
-     * @param game - текущая игра
+     * @param game - текущая игра, нужна для получения интерфейса фалового ввода для загрузки модели
      * @param region - регион текстуры с мини-атласом деталей модели. Сначала делается мини-атлас и файл модели
      *               в редакторе SkelEd, а затем мини-атлас присоединяется к общей текстуре с помощью упаковщика
      *               текстур как кадр спрайта (для того, чтобы избежать лишнего переключения текстур). Перед
@@ -163,7 +163,20 @@ public class SkeletonModel {
     }
 
 
+    public void play(int startFrame, int endFrame, boolean loop, int fps){
+        if (fps<=0) fps=1;
+        n_fps = fps;
+        f_fixed_delta = 1.0f/n_fps;
+        play(startFrame, endFrame, loop);
+    }
 
+
+    public void play(boolean loop, int fps) {
+        if (fps<=0) fps=1;
+        n_fps = fps;
+        f_fixed_delta = 1.0f/n_fps;
+        play(loop);
+    }
 
     /**
      * останавливает анимацию модели

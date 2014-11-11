@@ -38,8 +38,8 @@ public abstract class Graphics {
 
     protected GLCommon gl;                      // интерфейс для обращения к функиям OpenGL
 
-    protected   Shader  shaderProgram;          // стандартный шейдер для вывода текстурных объектов
-    protected   Shader  clearProgram;           // стандартный безтекстурный шейдер для очистки экрана
+    protected   Shader shaderForSprites;          // стандартный шейдер для вывода текстурных объектов
+    protected   Shader shaderForPrimitives;       // standart shader for primitives
 
     protected   FloatBuffer vertexBuffer;       // буффер с прорисовываемыми вершинами
 
@@ -52,6 +52,7 @@ public abstract class Graphics {
     protected   int viewportWidth, viewportHeight;  //реальная ширина и высота viewport-a
 
     private Texture currentTexture;
+    private boolean isFirstDrawCall=true;
 
     // матрицы
     protected float[] projectionMatrix = new float[16];
@@ -62,7 +63,7 @@ public abstract class Graphics {
     public Graphics(Game game){
         this.game = game;
 
-//        shaderProgram = null;
+//        shaderForSprites = null;
 
         // подготовим массив вершин
         vertexBuffer = ByteBuffer.
@@ -99,21 +100,31 @@ public abstract class Graphics {
 
 
     public final void end(){
+        Shader shader;
+        if (currentTexture == null)
+            shader = shaderForPrimitives;
+        else
+            shader = shaderForSprites;
+
+        useShader(shader);
+
         vertexBuffer.rewind();
         // Передаем значения о расположении.
         vertexBuffer.position(POSITION_OFFSET);
-        gl.glVertexAttribPointer(shaderProgram.positionAttrLocation, POSITION_SIZE, GL_FLOAT, false, STRIDE, vertexBuffer);
-        gl.glEnableVertexAttribArray(shaderProgram.positionAttrLocation);
+        gl.glVertexAttribPointer(shader.positionAttrLocation, POSITION_SIZE, GL_FLOAT, false, STRIDE, vertexBuffer);
+        gl.glEnableVertexAttribArray(shader.positionAttrLocation);
 
         // Передаем значения о цвете.
         vertexBuffer.position(COLOR_OFFSET);
-        gl.glVertexAttribPointer(shaderProgram.colorAttrLocation, COLOR_SIZE, GL_FLOAT, false, STRIDE, vertexBuffer);
-        gl.glEnableVertexAttribArray(shaderProgram.colorAttrLocation);
+        gl.glVertexAttribPointer(shader.colorAttrLocation, COLOR_SIZE, GL_FLOAT, false, STRIDE, vertexBuffer);
+        gl.glEnableVertexAttribArray(shader.colorAttrLocation);
 
-        // Передаем значения о текстурных координатах.
-        vertexBuffer.position(TEX_COORD_OFFSET);
-        gl.glVertexAttribPointer(shaderProgram.texCoordAttrLocation, TEX_COORD_SIZE, GL_FLOAT, false, STRIDE, vertexBuffer);
-        gl.glEnableVertexAttribArray(shaderProgram.texCoordAttrLocation);
+        if (shader == shaderForSprites) {
+            // Передаем значения о текстурных координатах.
+            vertexBuffer.position(TEX_COORD_OFFSET);
+            gl.glVertexAttribPointer(shader.texCoordAttrLocation, TEX_COORD_SIZE, GL_FLOAT, false, STRIDE, vertexBuffer);
+            gl.glEnableVertexAttribArray(shader.texCoordAttrLocation);
+        }
 
         // непосредственно рисуем все что накопилось в буфере
         gl.glDrawArrays(GL_TRIANGLES, 0, VERTICES_PER_QUAD * spritesCount);
@@ -121,6 +132,7 @@ public abstract class Graphics {
         // обнулим счетчик спрайтов - мы их уже нарисовали
         spritesCount = 0;
         currentTexture = null;
+        isFirstDrawCall = true;
     }
 
 
@@ -177,10 +189,13 @@ public abstract class Graphics {
         Matrix.multiplyMM(mpvMatrix, 0, projectionMatrix, 0, viewModelMatrix, 0);
 
 
-        // создаем два шейдера - один текстурный, другой для очистки экрана
-        shaderProgram = new Shader(this);
-        useShader(shaderProgram);
-        gl.glUniformMatrix4fv(shaderProgram.mpvMatrixUniformLocation, 1, false, mpvMatrix, 0);
+        // create two default shaders - one for sprites, and another one for primitives
+        shaderForSprites = new Shader(this, Shader.DEFAULT_FOR_SPRITES);
+        shaderForPrimitives = new Shader(this, Shader.DEFAULT_FOR_PRIMITIVES);
+        useShader(shaderForSprites);
+
+
+        gl.glUniformMatrix4fv(shaderForSprites.mpvMatrixUniformLocation, 1, false, mpvMatrix, 0);
 
         // перезагрузим текстуры
         // восстановим текстуры при создании поверхности - это происходит в самом начале, при запуске игры
@@ -220,16 +235,17 @@ public abstract class Graphics {
     }
 
 
-    public void draw(Texture texture, float[] vertices) {
-        if (texture == null)
-            return;
+    void draw(Texture texture, float[] vertices) {
 
-        if (currentTexture == null) {        // первый запуск
+        if (isFirstDrawCall) {
+            isFirstDrawCall = false;
             currentTexture = texture;
             // Передаем текстуру
-            gl.glActiveTexture(GLCommon.GL_TEXTURE0);                         // установим активный текстурный блок
-            gl.glBindTexture(GLCommon.GL_TEXTURE_2D, texture.textureId);      // установим активную текстуру
-            gl.glUniform1i(shaderProgram.textureUniformLocation, 0);          // свяжем адрес униформы текстуры с номером акивного блока
+            if (currentTexture != null){
+                gl.glActiveTexture(GLCommon.GL_TEXTURE0);                         // установим активный текстурный блок
+                gl.glBindTexture(GLCommon.GL_TEXTURE_2D, texture.textureId);      // установим активную текстуру
+                gl.glUniform1i(shaderForSprites.textureUniformLocation, 0);          // свяжем адрес униформы текстуры с номером акивного блока
+            }
         }
 
         // если по ошибке рисуем из разных текстур, то нарисуем то что есть
@@ -239,9 +255,11 @@ public abstract class Graphics {
 
             currentTexture = texture;
             // Передаем текстуру
-            gl.glActiveTexture(GLCommon.GL_TEXTURE0);                         // установим активный текстурный блок
-            gl.glBindTexture(GLCommon.GL_TEXTURE_2D, texture.textureId);      // установим активную текстуру
-            gl.glUniform1i(shaderProgram.textureUniformLocation, 0);        // свяжем адрес униформы текстуры с номером акивного блока
+            if (currentTexture != null) {
+                gl.glActiveTexture(GLCommon.GL_TEXTURE0);                         // установим активный текстурный блок
+                gl.glBindTexture(GLCommon.GL_TEXTURE_2D, texture.textureId);      // установим активную текстуру
+                gl.glUniform1i(shaderForSprites.textureUniformLocation, 0);        // свяжем адрес униформы текстуры с номером акивного блока
+            }
         }
 
         // добавим вершины в буфер

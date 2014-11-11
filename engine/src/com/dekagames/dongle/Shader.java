@@ -9,6 +9,50 @@ package com.dekagames.dongle;
  * To change this template use File | Settings | File Templates.
  */
 public class Shader {
+    public static final int DEFAULT_FOR_SPRITES = 1;
+    public static final int DEFAULT_FOR_PRIMITIVES = 2;
+    public static final int USER_SHADER = 3;
+
+
+
+    // there are two groups of shaders: vertex/fragment shader for drawing primitives (without texturing,
+    // color only) and vertex/fragment shader for drawing sprites (with textures)
+    final static String PRIMITIVE_VERTEX_SHADER =
+            "uniform mat4 u_MVPMatrix;                          \n"     // Константа отвечающая за комбинацию матриц МОДЕЛЬ/ВИД/ПРОЕКЦИЯ.
+                    + "attribute vec4 a_Position;               \n"     // Информация о положении вершин.
+                    + "attribute vec4 a_Color;                  \n"     // Информация о цвете вершин.
+                    + "varying vec4 v_Color;                    \n"     // Это будет передано в фрагментный шейдер.
+
+                    + "void main()                              \n"     // Начало программы вершинного шейдера.
+                    + "{                                        \n"
+                    + "   v_Color = a_Color;                    \n"     // Передаем цвет для фрагментного шейдера.
+                    // Он будет интерполирован для всего треугольника.
+                    + "   gl_Position = u_MVPMatrix             \n"     // gl_Position специальные переменные используемые для хранения конечного положения.
+                    + "               * a_Position;             \n"     // Умножаем вершины на матрицу для получения конечного положения
+                    + "}                                        \n";    // в нормированных координатах экрана.
+
+    final static String PRIMITIVE_FRAGMENT_SHADER =
+            // Устанавливаем по умолчанию среднюю точность для переменных. Максимальная точность
+            // в фрагментном шейдере не нужна.
+            // Примечание: устанавливаем точность если у нас андроидовский OpenGLES, так как директивы
+            // precision не было в настольном OpenGL до версии 4.1 (или типа того)
+            "#ifdef GL_ES\n"
+                    +"precision mediump float;\n"
+                    +"#endif\n"
+
+                    + "varying vec4 v_Color;                    \n"     // Цвет вершинного шейдера преобразованного
+                                                                        // для фрагмента треугольников.
+
+                    + "void main()                              \n"     // Точка входа для фрагментного шейдера.
+                    + "{                                        \n"
+                    + " gl_FragColor = v_Color;                        \n"     // Передаем значения цветов.
+                    + "}                                                        \n";
+
+
+
+
+
+
     final static String DEFAULT_VERTEX_SHADER =
             "uniform mat4 u_MVPMatrix;                          \n"     // Константа отвечающая за комбинацию матриц МОДЕЛЬ/ВИД/ПРОЕКЦИЯ.
                     + "attribute vec4 a_Position;               \n"     // Информация о положении вершин.
@@ -48,6 +92,7 @@ public class Shader {
 
 
     private boolean     is_default_shader;
+    private int         kindOfShader;
     private int         vertexShaderHandle;
     private int         fragmentShaderHandle;
     private int         shaderProgramHandle;
@@ -60,13 +105,18 @@ public class Shader {
     public int texCoordAttrLocation;           // то же для текстурных координат
 
 
-    public Shader(Graphics graphics){
-        is_default_shader = true;
-        build(graphics.getGl(), DEFAULT_VERTEX_SHADER, DEFAULT_FRAGMENT_SHADER);
+    public Shader(Graphics graphics, int kind){
+        kindOfShader = kind;
+        if (kind == DEFAULT_FOR_PRIMITIVES){
+            is_default_shader = true;
+            build(graphics.getGl(), PRIMITIVE_VERTEX_SHADER, PRIMITIVE_FRAGMENT_SHADER);
+        } else if (kind == DEFAULT_FOR_SPRITES){
+            is_default_shader = true;
+            build(graphics.getGl(), DEFAULT_VERTEX_SHADER, DEFAULT_FRAGMENT_SHADER);
+        } else {
+
+        }
     }
-
-
-
 
 
     private void build(GLCommon gl, final String vertex_shader, final String fragment_shader){
@@ -144,11 +194,13 @@ public class Shader {
 
             // получим адреса обязательных атрибутов, которые должны присутствовать в шейдере
             mpvMatrixUniformLocation = gl.glGetUniformLocation(shaderProgramHandle, "u_MVPMatrix");  // адрес униформы матрицы
-            textureUniformLocation = gl.glGetUniformLocation(shaderProgramHandle,"u_Texture");   // адрес униформы текстуры
-
             positionAttrLocation = gl.glGetAttribLocation(shaderProgramHandle, "a_Position");             // адреса атрибуов передаваемых в шейдер
             colorAttrLocation = gl.glGetAttribLocation(shaderProgramHandle, "a_Color");
-            texCoordAttrLocation = gl.glGetAttribLocation(shaderProgramHandle,"a_TexCoordinate");
+
+            if (kindOfShader == DEFAULT_FOR_SPRITES || kindOfShader == USER_SHADER) {
+                textureUniformLocation = gl.glGetUniformLocation(shaderProgramHandle, "u_Texture");   // адрес униформы текстуры
+                texCoordAttrLocation = gl.glGetAttribLocation(shaderProgramHandle, "a_TexCoordinate");
+            }
         }
     }
 

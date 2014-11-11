@@ -135,6 +135,7 @@ public class MainScreen extends Screen {
         model.draw(gr, 400,200, fangle);
 
         // выведем FPS загруженным шрифтом
+        font.setColor(1,0,0,1);
         font.drawString(gr,"Hello world! FPS: "+game.getFPS(), 200,100);
 
         // обработка ввода

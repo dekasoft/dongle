@@ -45,8 +45,8 @@ public class Shader {
 
                     + "void main()                              \n"     // Точка входа для фрагментного шейдера.
                     + "{                                        \n"
-                    + " gl_FragColor = v_Color;                        \n"     // Передаем значения цветов.
-                    + "}                                                        \n";
+                    + " gl_FragColor = v_Color;                 \n"     // Передаем значения цветов.
+                    + "}                                        \n";
 
 
 
@@ -119,6 +119,11 @@ public class Shader {
     }
 
 
+    public int getKind(){
+        return kindOfShader;
+    }
+
+
     private void build(GLCommon gl, final String vertex_shader, final String fragment_shader){
         // Загрузка вершинного шейдера.
         vertexShaderHandle = gl.glCreateShader(GLCommon.GL_VERTEX_SHADER);
@@ -174,9 +179,6 @@ public class Shader {
             gl.glAttachShader(shaderProgramHandle, vertexShaderHandle);
             // Подключаем фрагментный шейдер к программе.
             gl.glAttachShader(shaderProgramHandle, fragmentShaderHandle);
-            // Подключаем атрибуты цвета и положения
-//            GLES20.glBindAttribLocation(programHandle, 0, "a_Position");
-//            GLES20.glBindAttribLocation(programHandle, 1, "a_Color");
             // Объединяем оба шейдера в программе.
             gl.glLinkProgram(shaderProgramHandle);
             // Получаем статус линковки
@@ -197,10 +199,8 @@ public class Shader {
             positionAttrLocation = gl.glGetAttribLocation(shaderProgramHandle, "a_Position");             // адреса атрибуов передаваемых в шейдер
             colorAttrLocation = gl.glGetAttribLocation(shaderProgramHandle, "a_Color");
 
-            if (kindOfShader == DEFAULT_FOR_SPRITES || kindOfShader == USER_SHADER) {
-                textureUniformLocation = gl.glGetUniformLocation(shaderProgramHandle, "u_Texture");   // адрес униформы текстуры
-                texCoordAttrLocation = gl.glGetAttribLocation(shaderProgramHandle, "a_TexCoordinate");
-            }
+            textureUniformLocation = gl.glGetUniformLocation(shaderProgramHandle, "u_Texture");   // адрес униформы текстуры
+            texCoordAttrLocation = gl.glGetAttribLocation(shaderProgramHandle, "a_TexCoordinate");
         }
     }
 

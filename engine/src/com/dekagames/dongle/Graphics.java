@@ -44,6 +44,7 @@ public abstract class Graphics {
     protected   FloatBuffer vertexBuffer;       // буффер с прорисовываемыми вершинами
 
     protected   int spritesCount;               // сколько спрайтов будем рисовать
+    protected   int vertexCount;                // how many vertexes to draw
     protected   int maxSpritesAmount;           // сколько максимум спрайтов рисуется за один проход
     public      int physicalWidth, physicalHeight;
 
@@ -100,14 +101,17 @@ public abstract class Graphics {
 
 
     public final void end(){
+        // we always send ALL data to ANY shader. e.g. we send texture data to primitives shader too.
+        // texture's uniforms in primitive's shader are NOT exist, thus its location variables is -1.
+
         Shader shader;
+
         if (currentTexture == null)
             shader = shaderForPrimitives;
         else
             shader = shaderForSprites;
 
         useShader(shader);
-
         vertexBuffer.rewind();
         // Передаем значения о расположении.
         vertexBuffer.position(POSITION_OFFSET);
@@ -119,7 +123,7 @@ public abstract class Graphics {
         gl.glVertexAttribPointer(shader.colorAttrLocation, COLOR_SIZE, GL_FLOAT, false, STRIDE, vertexBuffer);
         gl.glEnableVertexAttribArray(shader.colorAttrLocation);
 
-        if (shader == shaderForSprites) {
+        if (shader.getKind() != Shader.DEFAULT_FOR_PRIMITIVES) {
             // Передаем значения о текстурных координатах.
             vertexBuffer.position(TEX_COORD_OFFSET);
             gl.glVertexAttribPointer(shader.texCoordAttrLocation, TEX_COORD_SIZE, GL_FLOAT, false, STRIDE, vertexBuffer);
@@ -127,10 +131,11 @@ public abstract class Graphics {
         }
 
         // непосредственно рисуем все что накопилось в буфере
-        gl.glDrawArrays(GL_TRIANGLES, 0, VERTICES_PER_QUAD * spritesCount);
+        gl.glDrawArrays(GL_TRIANGLES, 0, vertexCount);//VERTICES_PER_QUAD * spritesCount);
         gl.glFlush();   // нехило ускоряется процесс из-за этой команды
         // обнулим счетчик спрайтов - мы их уже нарисовали
         spritesCount = 0;
+        vertexCount = 0;
         currentTexture = null;
         isFirstDrawCall = true;
     }
@@ -192,10 +197,13 @@ public abstract class Graphics {
         // create two default shaders - one for sprites, and another one for primitives
         shaderForSprites = new Shader(this, Shader.DEFAULT_FOR_SPRITES);
         shaderForPrimitives = new Shader(this, Shader.DEFAULT_FOR_PRIMITIVES);
+
+        // send MPV matrix to both shaders
+        // before we send uniform to shader we MUST enable shader by useShader command!!!
         useShader(shaderForSprites);
-
-
         gl.glUniformMatrix4fv(shaderForSprites.mpvMatrixUniformLocation, 1, false, mpvMatrix, 0);
+        useShader(shaderForPrimitives);
+        gl.glUniformMatrix4fv(shaderForPrimitives.mpvMatrixUniformLocation, 1, false, mpvMatrix, 0);
 
         // перезагрузим текстуры
         // восстановим текстуры при создании поверхности - это происходит в самом начале, при запуске игры
@@ -236,6 +244,8 @@ public abstract class Graphics {
 
 
     void draw(Texture texture, float[] vertices) {
+        // maximum vertices[] size is 48 - 6 vertices of 8 floats!!!! If we draw primitive, it is not
+        // allowed to send more then 6 vertices by method call.
 
         if (isFirstDrawCall) {
             isFirstDrawCall = false;
@@ -264,6 +274,8 @@ public abstract class Graphics {
 
         // добавим вершины в буфер
         vertexBuffer.put(vertices);
+        vertexCount += vertices.length/VERTEX_SIZE;
+
         spritesCount++;
 
         if (spritesCount >= MAX_SPRITES_DEFAULT) {

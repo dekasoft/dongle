@@ -138,6 +138,9 @@ public class MainScreen extends Screen {
         font.setColor(1,0,0,1);
         font.drawString(gr,"Hello world! FPS: "+game.getFPS(), 200,100);
 
+        // draw primitives
+        Primitives.drawPoint(gr, 1, 1);
+
         // обработка ввода
         if (game.input.touched[0] && !nowTouched){ // произошла касание
             nowTouched = true;

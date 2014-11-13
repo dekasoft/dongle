@@ -247,22 +247,12 @@ public abstract class Graphics {
         // maximum vertices[] size is 48 - 6 vertices of 8 floats!!!! If we draw primitive, it is not
         // allowed to send more then 6 vertices by method call.
 
-        if (isFirstDrawCall) {
-            isFirstDrawCall = false;
-            currentTexture = texture;
-            // Передаем текстуру
-            if (currentTexture != null){
-                gl.glActiveTexture(GLCommon.GL_TEXTURE0);                         // установим активный текстурный блок
-                gl.glBindTexture(GLCommon.GL_TEXTURE_2D, texture.textureId);      // установим активную текстуру
-                gl.glUniform1i(shaderForSprites.textureUniformLocation, 0);          // свяжем адрес униформы текстуры с номером акивного блока
-            }
-        }
-
-        // если по ошибке рисуем из разных текстур, то нарисуем то что есть
+        // if texture changing detected - we'll finish previous draw and send new texture to shader
         if (currentTexture != texture) {
-            end();
-            begin();
-
+            if (!isFirstDrawCall) {
+                end();
+                begin();
+            }
             currentTexture = texture;
             // Передаем текстуру
             if (currentTexture != null) {
@@ -271,6 +261,8 @@ public abstract class Graphics {
                 gl.glUniform1i(shaderForSprites.textureUniformLocation, 0);        // свяжем адрес униформы текстуры с номером акивного блока
             }
         }
+        isFirstDrawCall = false;
+
 
         // добавим вершины в буфер
         vertexBuffer.put(vertices);

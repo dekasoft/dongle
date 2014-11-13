@@ -126,9 +126,11 @@ public class MainScreen extends Screen {
         // выводим спрайт загруженный из атласа
         spriteFromAtlas.draw(gr, 200,100);
 
-        for (int i = 0; i < 5000; i++) {
-            spriteFromAtlas.draw(gr,rand.nextInt(game.getVirtualWidth()), rand.nextInt(game.getVirtualHeight()));
-        }
+        spriteFromAtlas.draw(gr, 300,100);
+
+//        for (int i = 0; i < 5; i++) {
+//            spriteFromAtlas.draw(gr,rand.nextInt(game.getVirtualWidth()), rand.nextInt(game.getVirtualHeight()));
+//        }
 
 
         // рисуем скелетную модель

@@ -140,6 +140,18 @@ public class MainScreen extends Screen {
 
         // draw primitives
         Primitives.drawPoint(gr, 1, 1);
+        for (int i=0; i<90; i+=10){
+            Primitives.drawLine(gr, 10,10, 50*(float)Math.cos(Math.toRadians(i)), 50*(float)Math.sin(Math.toRadians(i)));
+        }
+        Primitives.drawCircle(gr, 50,50, 30);
+
+        float[] vert = new float[10];
+        vert[0] = 10; vert[1] = 200;
+        vert[2] = 50; vert[3] = 200;
+        vert[4] = 70; vert[5] = 280;
+        vert[6] = 40; vert[7] = 360;
+        vert[8] = 0; vert[9] = 250;
+        Primitives.drawPolygon(gr, vert);
 
         // обработка ввода
         if (game.input.touched[0] && !nowTouched){ // произошла касание

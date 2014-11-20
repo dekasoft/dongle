@@ -99,11 +99,11 @@ public class JoglApp implements Application, GLEventListener, KeyListener, Mouse
         if (game != null) {
             game.update(deltaTime);
             game.draw();
-            // обнулим последние события тачей
-            synchronized(game.input){
-                game.input.wasTouched = false;
-                game.input.wasUnTouched = false;
-            }
+//            // обнулим последние события тачей
+//            synchronized(game.input){
+//                game.input.wasTouched = false;
+//                game.input.wasUnTouched = false;
+//            }
         }
     }
 

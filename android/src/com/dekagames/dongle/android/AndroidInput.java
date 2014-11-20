@@ -12,6 +12,7 @@ import android.view.View;
 import com.dekagames.dongle.Graphics;
 import com.dekagames.dongle.Input;
 import android.view.View.OnTouchListener;
+import com.dekagames.dongle.Log;
 
 
 /**

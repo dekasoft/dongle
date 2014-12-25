@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class Window {
     protected	WindowManager				manager;
     protected   ArrayList<Control>          controls;
+    protected   boolean skinned;
     protected   Sprite spr_skin;
     protected	int							n_top, n_left, n_width, n_height;		// положение в пикселях базового экрана
     protected	int							n_width_cells, n_height_cells;			// размеры окна в спрайтах
@@ -18,6 +19,8 @@ public class Window {
 
 
     /**
+     * Create window from skin sprite - tiled window image.
+     *
      * @param manager менеджер окон
      * @param skin спрайт, представляющий собой 9 кадров слева направо-сверху вниз (части окна). Все кадры одинакового
      *             размера.
@@ -28,6 +31,7 @@ public class Window {
      */
     public Window(WindowManager manager, Sprite skin, int x, int y, int width_cells, int height_cells) {
         this.manager = manager;
+        skinned = true;
         spr_skin = skin;
         n_left = x;
         n_top = y;
@@ -35,6 +39,27 @@ public class Window {
         n_height_cells = height_cells+2;
         n_width = spr_skin.getFrameWidth(0)*n_width_cells;
         n_height = spr_skin.getFrameHeight(0)*n_height_cells;
+        spr_skin.setHotSpot(0, 0);
+        controls = new ArrayList<Control>();
+    }
+
+
+    /**
+     * Create window from full window image. Size of the window = size of the image. Not scaled.
+     *
+     * @param manager window manager
+     * @param bkImage sprite with full window image (window background and decoration without controls)
+     * @param x x position  of window (top left corner)
+     * @param y y position of window (top left corner)
+     */
+    public Window(WindowManager manager, Sprite bkImage, int x, int y){
+        this.manager = manager;
+        skinned = false;
+        spr_skin = bkImage;
+        n_left = x;
+        n_top = y;
+        n_width = spr_skin.getFrameWidth(0);
+        n_height = spr_skin.getFrameHeight(0);
         spr_skin.setHotSpot(0, 0);
         controls = new ArrayList<Control>();
     }
@@ -53,7 +78,7 @@ public class Window {
         n_top = 0;
         n_width_cells = 0;
         n_height_cells = 0;
-        n_width = manager.getGame().getVirtualWidth();
+        n_width = manager.getGame().getVirtualWidth();      // full screen size
         n_height = manager.getGame().getVirtualHeight();
         controls = new ArrayList<Control>();
     }

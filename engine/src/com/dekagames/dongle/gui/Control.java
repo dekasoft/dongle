@@ -19,7 +19,7 @@ public abstract class Control {
 
     public Control(Window p) {
         parent = p;
-        scale = p.manager.scale;
+//        scale = p.manager.scale;
         bVisible = true;
     }
 

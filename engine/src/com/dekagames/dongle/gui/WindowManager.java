@@ -10,23 +10,17 @@ import java.util.ArrayList;
  * Created by deka on 23.07.14.
  */
 public class WindowManager {
-    public	    float					scale;			// нужно для того чтобы менеджер мог переводить координаты в базовые
     protected   Screen                  screen;
     protected   Game                    game;
     protected   ArrayList<Window>       windows;		// дочерние окна
     protected	boolean					prevTouch;		// предыдущее состояние тача для контроля изменения
     protected 	boolean					prevOnWindow;	// указатель был над окном
-//    private		int						n_dip_w, n_dip_h;	// размеры реального экрана в базовых координатах
 
 
-    public WindowManager(Game g, Screen s, float f_scale) {
+    public WindowManager(Game g, Screen s) {
         game = g;
         screen = s;
-        scale = f_scale;
         windows = new ArrayList<Window>();
-
-//        n_dip_w = Math.round(Gdx.graphics.getWidth()/scale);		// перевод в базовые координаты !!!
-//        n_dip_h = Math.round(Gdx.graphics.getHeight()/scale);
     }
 
     public Screen getScreen() {
@@ -36,13 +30,6 @@ public class WindowManager {
     public Game getGame() {
         return game;
     }
-//    public int getDIPWidth() {
-//        return n_dip_w;
-//    }
-//
-//    public int getDIPHeight() {
-//        return n_dip_h;
-//    }
 
     public void addWindow(Window w) {
         windows.add(w);

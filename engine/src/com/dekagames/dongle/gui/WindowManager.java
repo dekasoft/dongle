@@ -15,6 +15,7 @@ public class WindowManager {
     protected   ArrayList<Window>       windows;		// дочерние окна
     protected	boolean					prevTouch;		// предыдущее состояние тача для контроля изменения
     protected 	boolean					prevOnWindow;	// указатель был над окном
+    protected   boolean                 is_any_ctrl_pressed;    // right now!!
 
 
     public WindowManager(Game g, Screen s) {
@@ -32,17 +33,41 @@ public class WindowManager {
     }
 
     public void addWindow(Window w) {
+        w.setManager(this);
         windows.add(w);
     }
 
     public void removeTopWindow() {
-        if (windows.size()>0)
-            windows.remove(windows.size()-1);
+        if (windows.size()>0) {
+            windows.get(windows.size()-1).setManager(null);
+            windows.remove(windows.size() - 1);
+        }
     }
+
+
 
     public Window getTopWindow() {
         return windows.get(windows.size()-1);
     }
+
+
+    public boolean isAnyControlPressed(){
+        return is_any_ctrl_pressed;
+    }
+
+
+    /**
+     * Get last complete action control (for example button was pressed and released)
+     * and remove this event from window
+     * @return last active control or null
+     */
+    public Control extractLastDoneControl(){
+        Window w = getTopWindow();
+        Control c = w.getLastDoneControl();
+        w.resetDoneControl();
+        return c;
+    }
+
 
     public void draw(Graphics graphics) {
         for (int i=0; i<windows.size();i++)
@@ -52,21 +77,19 @@ public class WindowManager {
     public void update(float delta) {
         if (windows.size()!=0) {		                        // работаем только с верхним окном, так как все окна - модальные
             Window window = windows.get(windows.size()-1);		// получим верхнее окно которому будем посылать сообщения
-            window.update(delta);
-            boolean bTouch = game.input.touched[0];//Gdx.input.isTouched();
-            float touchX = game.input.touchX[0];//Gdx.input.getX()/scale;
-            float touchY = game.input.touchY[0];//Gdx.input.getY()/scale;
-//			System.out.println("touchX="+touchX+ " touchY="+touchY);
+            boolean bTouch = game.input.touched[0];
+            float touchX = game.input.touchX[0];
+            float touchY = game.input.touchY[0];
             boolean	isOnWindow = window.isPointIn(touchX, touchY);	// указатель над окном или нет
-
 
             // отслеживаем нажатие и отжатие
             if (bTouch != prevTouch) {								// имело место нажатие или отжатие
                 prevTouch = bTouch;
                 if (isOnWindow) {				// если дело было над окном
-                    window.windowTouched(bTouch, touchX-window.getLeft(), touchY-window.getTop());
+                    is_any_ctrl_pressed = window.windowTouched(bTouch, touchX-window.getLeft(), touchY-window.getTop());
                 }
             }
+
 
             // постоянно отслеживаем положение указателя
             if (bTouch) {
@@ -82,6 +105,9 @@ public class WindowManager {
                 }
 
             }
+
+            window.update(delta);
+
         }
     }
 

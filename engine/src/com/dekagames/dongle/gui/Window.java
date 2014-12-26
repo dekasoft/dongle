@@ -21,7 +21,6 @@ public class Window {
     /**
      * Create window from skin sprite - tiled window image.
      *
-     * @param manager менеджер окон
      * @param skin спрайт, представляющий собой 9 кадров слева направо-сверху вниз (части окна). Все кадры одинакового
      *             размера.
      * @param x координата x левого верхнего угла окна в пикселях
@@ -29,8 +28,7 @@ public class Window {
      * @param width_cells количество ячеек окна по горизонтали (без учета крайних)
      * @param height_cells количество ячеек окна по вертикали (без учета крайних)
      */
-    public Window(WindowManager manager, Sprite skin, int x, int y, int width_cells, int height_cells) {
-        this.manager = manager;
+    public Window(Sprite skin, int x, int y, int width_cells, int height_cells) {
         skinned = true;
         spr_skin = skin;
         n_left = x;
@@ -47,13 +45,11 @@ public class Window {
     /**
      * Create window from full window image. Size of the window = size of the image. Not scaled.
      *
-     * @param manager window manager
      * @param bkImage sprite with full window image (window background and decoration without controls)
      * @param x x position  of window (top left corner)
      * @param y y position of window (top left corner)
      */
-    public Window(WindowManager manager, Sprite bkImage, int x, int y){
-        this.manager = manager;
+    public Window(Sprite bkImage, int x, int y){
         skinned = false;
         spr_skin = bkImage;
         n_left = x;
@@ -68,21 +64,23 @@ public class Window {
     /**
      * Нерисуемое окно. Требуется для контролов, которые находятся вне окна - просто на экране.
      * Так как контрол не может не иметь родительского окна, создается такое, прозрачное окно.
-     * @param manager менеджер окон
      */
-    public Window(WindowManager manager) {
-        this.manager = manager;
+    public Window(int width, int height) {
         spr_skin = null;
 
         n_left = 0;
         n_top = 0;
         n_width_cells = 0;
         n_height_cells = 0;
-        n_width = manager.getGame().getVirtualWidth();      // full screen size
-        n_height = manager.getGame().getVirtualHeight();
+        n_width =width;      // full screen size
+        n_height = height;
         controls = new ArrayList<Control>();
     }
 
+
+    public void setManager(WindowManager manager){
+        this.manager = manager;
+    }
 
     public boolean isPointIn(float x, float y) {
         return (x>=n_left && x<=n_left+n_width && y>n_top && y<n_top+n_height);
@@ -106,6 +104,8 @@ public class Window {
     public void setHeight(int h)	{ n_height = h;}
 
     public void addCtrl(Control c) {
+        if (c == null) return;
+        c.setParentWindow(this);
         controls.add(c);
     }
 
@@ -123,12 +123,17 @@ public class Window {
     /**
      * вызывается при таче или антаче в окне.
      */
-    public void windowTouched(boolean down, float x, float y) {
+    public boolean windowTouched(boolean down, float x, float y) {
+        boolean is_any_control_pressed =false;
 
         for (Control ctrl:controls) {
-            if (ctrl.isPointIn(x,y))
+            if (ctrl.isPointIn(x,y)){
                 ctrl.controlTouched(down);
+                is_any_control_pressed |= down;
+            }
         }
+
+        return is_any_control_pressed;
     }
 
     /**

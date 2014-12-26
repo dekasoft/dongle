@@ -12,9 +12,9 @@ import java.util.HashSet;
  */
 public abstract class Input {
 //    private View view_;
-    public float touchX[] = new float[20];              // координаты указателя (до 20 одновременно)
-    public float touchY[] = new float[20];              //
-    public boolean touched[] = new boolean[20];         // и флаг нажатости
+    public float touchX[] = new float[5];              // координаты указателя (до 5 одновременно)
+    public float touchY[] = new float[5];              //
+    public boolean touched[] = new boolean[5];          // и флаг нажатости
     public boolean buttoned[] = new boolean[3];         // три мышиные кнопки
 
     // для акселерометра
@@ -140,7 +140,19 @@ public abstract class Input {
         return k;
     }
 
+    /**
+     * Reset all input data: clear touch and button arrays
+     *
+     */
+    public void reset(){
+        wasTouched = false;
+        wasUnTouched = false;
 
+        for (int i = 0; i < 5; i++)
+            touched[i]  = false;
+        for (int i = 0; i < 3; i++)
+            buttoned[i] = false;
+    }
 
 
 //    /** The azimuth is the angle of the device's orientation around the z-axis. The positive z-axis points towards the earths

@@ -21,14 +21,13 @@ public class Button extends Control{
     /**
      * @deprecated
      * Create the button from the sprite.
-     * @param p parent window
      * @param stages how many stages has the button
      * @param spr sprite for button. Must consist of up to three frames (amount of frames = amount of stages).
      * @param x X position of the button, relatively of the upper left corner of the parent window
      * @param y Y position of the button, relatively of the upper left corner of the parent window
      */
-    public Button(Window p, int stages, Sprite spr, float x, float y) {
-        super(p);
+    public Button(int stages, Sprite spr, float x, float y) {
+        super();
         if (stages<=0) 	stages = 1;
         if (stages>3) 	stages = 3;
         n_stages = stages;
@@ -43,15 +42,14 @@ public class Button extends Control{
     /**
      * Create the button from the sprite, which placed in the SlonNode structure. This method is using for loading
      * button sprite from the texture atlas, made with TexturePacker tool.
-     * @param p parent window
      * @param stages how many stages has the button
      * @param tex texture atlas create by TexturePacker.
      * @param node sprite node from *.atlas file which represent button sprite
      * @param x X position of the button, relatively of the upper left corner of the parent window
      * @param y Y position of the button, relatively of the upper left corner of the parent window
      */
-    public Button(Window p, int stages, Texture tex, SlonNode node, float x, float y) {
-        super(p);
+    public Button(int stages, Texture tex, SlonNode node, float x, float y) {
+        super();
         if (stages<=0) 	stages = 1;
         if (stages>3) 	stages = 3;
         n_stages = stages;
@@ -93,15 +91,18 @@ public class Button extends Control{
     }
 
     @Override
-    public void controlTouched(boolean down) {
+    public boolean controlTouched(boolean down) {
         if (!enabled) {
             is_pressed = false;
-            return;
+            return false;
         }
 
         is_pressed = down;
-        if (!is_pressed && bVisible)
-            bDone = true;			// window will process this button
+        if (!is_pressed && bVisible) {
+            bDone = true;            // window will process this button
+
+        }
+        return is_pressed;
     }
 
     @Override

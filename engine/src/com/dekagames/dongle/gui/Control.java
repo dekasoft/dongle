@@ -10,17 +10,19 @@ import com.dekagames.dongle.Graphics;
  * All gui controls must have parent window.
  */
 public abstract class Control {
-    public      Window      parent;
+    protected   Window      parent;
     protected	float		scale;
     public 		float 		fx,fy, fwidth, fheight;
     /** Flag, if its true, than parent window must process this control  */
     public		boolean		bDone;
     public 		boolean		bVisible;
 
-    public Control(Window p) {
-        parent = p;
-//        scale = p.manager.scale;
+    public Control() {
         bVisible = true;
+    }
+
+    public void setParentWindow(Window window){
+        parent = window;
     }
 
     public abstract void draw(Graphics graphics);
@@ -53,8 +55,10 @@ public abstract class Control {
             return false;
     }
 
-    /** Called by parent window when touch or detouch event is occured. */
-    public abstract void controlTouched(boolean down);
+    /** Called by parent window when touch or detouch event is occured.
+     *  @return true if control is currently touched
+     * */
+    public abstract boolean controlTouched(boolean down);
 
     /** Called by the window when touched pointer is moving above the control  */
     public void touchMove(float x, float y){};

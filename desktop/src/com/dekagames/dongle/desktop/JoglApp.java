@@ -102,7 +102,7 @@ public class JoglApp implements Application, GLEventListener, KeyListener, Mouse
 //            // обнулим последние события тачей
 //            synchronized(game.input){
 //                game.input.wasTouched = false;
-//                game.input.wasUnTouched = false;
+//                game.input.wasUntouched = false;
 //            }
         }
     }
@@ -168,7 +168,7 @@ public class JoglApp implements Application, GLEventListener, KeyListener, Mouse
             synchronized (game.input) {
                 game.input.buttoned[0] = false;
                 game.input.touched[0] = false;
-                game.input.wasUnTouched = true;
+                game.input.wasUntouched = true;
             }
         }
         if (e.getButton() == 3)                     // правая кнопка

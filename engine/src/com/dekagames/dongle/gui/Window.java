@@ -181,8 +181,10 @@ public class Window {
 
     public void update(float delta) {
         for (Control ctrl:controls){
-            if (ctrl.update(delta))
+            if (ctrl.update(delta)) {
+                ctrl.bDone = false;
                 done_control = ctrl;
+            }
         }
     }
 

@@ -12,7 +12,7 @@ import com.dekagames.slon.SlonNode;
  */
 public class Button extends Control{
     protected       Sprite          sprite;
-    private 		boolean 		is_pressed;
+    protected 		boolean 		is_pressed;
     protected		int 			n_stages;
     public 			boolean			enabled;
     /** Place to store any of user data */
@@ -100,7 +100,6 @@ public class Button extends Control{
         is_pressed = down;
         if (!is_pressed && bVisible) {
             bDone = true;            // window will process this button
-
         }
         return is_pressed;
     }

@@ -64,6 +64,13 @@ public class WindowManager {
     public Control extractLastDoneControl(){
         Window w = getTopWindow();
         Control c = w.getLastDoneControl();
+
+        // if there was done control zero touch/untouch flags
+        if (c!= null){
+            game.input.wasTouched = false;
+            game.input.wasUntouched = false;
+        }
+
         w.resetDoneControl();
         return c;
     }

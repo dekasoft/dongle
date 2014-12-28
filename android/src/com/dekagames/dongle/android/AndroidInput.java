@@ -12,7 +12,6 @@ import android.view.View;
 import com.dekagames.dongle.Graphics;
 import com.dekagames.dongle.Input;
 import android.view.View.OnTouchListener;
-import com.dekagames.dongle.Log;
 
 
 /**
@@ -206,19 +205,19 @@ public class AndroidInput extends Input implements OnTouchListener, SensorEventL
 
     @Override
     public float getX(int pointer) {
-        if (pointer>=20) return 0;
+        if (pointer>=5) return 0;
         return touchX[pointer];
     }
 
     @Override
     public float getY(int pointer) {
-        if (pointer>=20) return 0;
+        if (pointer>=5) return 0;
         return touchY[pointer];
     }
 
     @Override
     public boolean isTouched(int pointer) {
-        if (pointer>=20)
+        if (pointer>=5)
             return false;
         else
             return touched[pointer];
@@ -303,6 +302,8 @@ public class AndroidInput extends Input implements OnTouchListener, SensorEventL
             float x = (event.getX(pointerIndex_) - Graphics.XOFFSET)/Graphics.SCALE;
             float y = (event.getY(pointerIndex_) - Graphics.YOFFSET)/Graphics.SCALE;
 
+//            System.out.println("x:"+event.getX(pointerIndex_)+", y:"+event.getY(pointerIndex_)+", XOFF:" + Graphics.XOFFSET+", YOFF:"+Graphics.YOFFSET);
+
             switch (action_){
                 case MotionEvent.ACTION_DOWN:
                 case MotionEvent.ACTION_POINTER_DOWN:
@@ -319,7 +320,7 @@ public class AndroidInput extends Input implements OnTouchListener, SensorEventL
                     touchY[pointerId_] = y;
                     touched[pointerId_] = false;
                     if (pointerId_ == 0)
-                        wasUnTouched = true;
+                        wasUntouched = true;
                     break;
                 case MotionEvent.ACTION_MOVE:
                     // из-за глюков переполучим pointerId

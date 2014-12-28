@@ -37,7 +37,7 @@ public abstract class Input {
 
     /** Флаг, показывающий что с момента обнуления его произошло событие отпускания
      * нулевого указателя (единственного/последнего пальца или левой кнопки мыши). Требует ручного обнуления */
-    public boolean wasUnTouched;
+    public boolean wasUntouched;
 
     // кнопки мыши
     public class Buttons {
@@ -45,16 +45,6 @@ public abstract class Input {
         public static final int RIGHT = 1;
         public static final int MIDDLE = 2;
     }
-
-
-
-
-
-//    /** Enumeration of potentially available peripherals. Use with {@link Input#isPeripheralAvailable(Peripheral)}.
-//     * @author mzechner */
-//    public enum Peripheral {
-//        HardwareKeyboard, OnscreenKeyboard, MultitouchScreen, Accelerometer, Compass, Vibrator
-//    }
 
     /** @return The value of the accelerometer on its x-axis. ranges between [-10,10]. */
     public abstract float getAccX();
@@ -87,6 +77,7 @@ public abstract class Input {
 
 //    /** @return whether a new touch down event just occured. */
 //    public boolean justTouched ();
+
 
     /** Whether the screen is currently touched by the pointer with the given index. Pointers are indexed from 0 to n. The pointer
      * id identifies the order in which the fingers went down on the screen, e.g. 0 is the first finger, 1 is the second and so on.
@@ -140,64 +131,6 @@ public abstract class Input {
         return k;
     }
 
-    /**
-     * Reset all input data: clear touch and button arrays
-     *
-     */
-    public void reset(){
-        wasTouched = false;
-        wasUnTouched = false;
-
-        for (int i = 0; i < 5; i++)
-            touched[i]  = false;
-        for (int i = 0; i < 3; i++)
-            buttoned[i] = false;
-    }
-
-
-//    /** The azimuth is the angle of the device's orientation around the z-axis. The positive z-axis points towards the earths
-//     * center.
-//     *
-//     * @see <a
-//     *      href="http://developer.android.com/reference/android/hardware/SensorManager.html#getRotationMatrix(float[], float[], float[], float[])">http://developer.android.com/reference/android/hardware/SensorManager.html#getRotationMatrix(float[], float[], float[], float[])</a>
-//     * @return the azimuth in degrees */
-//    public float getAzimuth ();
-//
-//    /** The pitch is the angle of the device's orientation around the x-axis. The positive x-axis roughly points to the west and is
-//     * orthogonal to the z- and y-axis.
-//     * @see <a
-//     *      href="http://developer.android.com/reference/android/hardware/SensorManager.html#getRotationMatrix(float[], float[], float[], float[])">http://developer.android.com/reference/android/hardware/SensorManager.html#getRotationMatrix(float[], float[], float[], float[])</a>
-//     * @return the pitch in degrees */
-//    public float getPitch ();
-//
-//    /** The roll is the angle of the device's orientation around the y-axis. The positive y-axis points to the magnetic north pole
-//     * of the earth.
-//     * @see <a
-//     *      href="http://developer.android.com/reference/android/hardware/SensorManager.html#getRotationMatrix(float[], float[], float[], float[])">http://developer.android.com/reference/android/hardware/SensorManager.html#getRotationMatrix(float[], float[], float[], float[])</a>
-//     * @return the roll in degrees */
-//    public float getRoll ();
-
-
-
-//    /** Queries whether a {@link Peripheral} is currently available. In case of Android and the {@link Peripheral#HardwareKeyboard}
-//     * this returns the whether the keyboard is currently slid out or not.
-//     *
-//     * @param peripheral the {@link Peripheral}
-//     * @return whether the peripheral is available or not. */
-//    public boolean isPeripheralAvailable (Peripheral peripheral);
-
-
-//    /** Only viable on the desktop. Will confine the mouse cursor location to the window and hide the mouse cursor.
-//     * @param catched whether to catch or not to catch the mouse cursor */
-//    public void setCursorCatched (boolean catched);
-//
-//    /** @return whether the mouse cursor is catched. */
-//    public boolean isCursorCatched ();
-
-//    /** Only viable on the desktop. Will set the mouse cursor location to the given window coordinates (origin top-left corner).
-//     * @param x the x-position
-//     * @param y the y-position */
-//    public void setCursorPosition (int x, int y);
 
 
     public static int ANY_KEY;

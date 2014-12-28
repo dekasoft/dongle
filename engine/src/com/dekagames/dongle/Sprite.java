@@ -280,6 +280,14 @@ public class Sprite {
     }
 
     /**
+     * Return number of frames.
+     * @return number of frames.
+     */
+    public int getFramesCount(){
+        return frames.length;
+    }
+
+    /**
      * Возвращает ширину кадра. Для спрайтов загруженных из SpriteSheet ширина всех кадров одинакова.
      * @param nFrame номер кадра, ширину которого нужно узнать. При выходе n за пределы диапазона номеров
      *               кадра, n "прокручивается" через количество кадров в анимации для возвращения

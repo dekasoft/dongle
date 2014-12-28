@@ -204,7 +204,7 @@ public class AndroidApp extends Activity implements Application, GLSurfaceView.R
 //                synchronized (game.input) {
 //                    Log.info("Clearing was touched");
 //                    game.input.wasTouched = false;
-//                    game.input.wasUnTouched = false;
+//                    game.input.wasUntouched = false;
 //                }
 
                 game.update(deltaTime);

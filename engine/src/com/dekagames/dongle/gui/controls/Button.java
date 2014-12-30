@@ -7,8 +7,7 @@ import com.dekagames.dongle.gui.Control;
 import com.dekagames.dongle.gui.Window;
 import com.dekagames.slon.SlonNode;
 
-/**
- * Created by deka on 23.07.14.
+/** Basic button class. Any button may have up to three stages: unpressed, pressed, unabled.
  */
 public class Button extends Control{
     protected       Sprite          sprite;

@@ -49,8 +49,10 @@ public abstract class Control {
     }
 
     public boolean 	update(float delta) {
-        if (bVisible)
-            return bDone;
+        if (bVisible && bDone) {
+            bDone = false;
+            return true;
+        }
         else
             return false;
     }

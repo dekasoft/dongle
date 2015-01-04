@@ -1,17 +1,93 @@
 package com.dekagames.dongle;
 
 
+import com.dekagames.dongle.gui.Window;
+
+import java.util.ArrayList;
+
 public abstract  class Screen {
-    protected final Game game;
-    public boolean isInitialized;
+
+    protected ArrayList<Window> windows;        // gui windows this screen managed. By default one window was created
+    protected Window            mainWindow;
+    protected final Game        game;
+    public boolean              isInitialized;
+    protected boolean           prevTouch;
+    protected boolean			prevOnWindow;	    // указатель был над окном
+    protected boolean           isAnyCtrlPressed;   // right now!!
 
     public Screen(Game game) {
         this.game = game;
+        windows = new ArrayList<Window>();
+        mainWindow = new Window(game.virtualWidth, game.virtualHeight);
+        mainWindow.setScreen(this);
+        windows.add(mainWindow);
+    }
+
+
+    public void addWindow(Window window){
+        if (window != null){
+            window.setScreen(this);
+            windows.add(window);
+        }
+    }
+
+
+    public void removeTopWindow(){
+        if (windows.size()>1){
+            windows.get(windows.size()-1).setScreen(null);
+            windows.remove(windows.size()-1);
+        }
+    }
+
+    public Window getTopWindow() {
+        return windows.get(windows.size()-1);
     }
 
 
     public Game getGame(){
         return game;
+    }
+
+
+    public void updateGUI(float deltaTime){
+        Window window = windows.get(windows.size()-1);		// получим верхнее окно которому будем посылать сообщения
+        if (window == null) return;
+
+        boolean bTouch = game.input.touched[0];
+        float touchX = game.input.touchX[0];
+        float touchY = game.input.touchY[0];
+
+        boolean	isOnWindow = window.isPointIn(touchX, touchY);	// указатель над окном или нет
+
+        // отслеживаем нажатие и отжатие
+        if (bTouch != prevTouch) {								// имело место нажатие или отжатие
+            prevTouch = bTouch;
+            if (isOnWindow) 				// если дело было над окном
+                isAnyCtrlPressed = window.windowTouched(bTouch, touchX-window.getLeft(), touchY-window.getTop());
+        }
+
+
+        // постоянно отслеживаем положение указателя
+        if (bTouch) {
+            if (isOnWindow)
+                window.touchMove(touchX-window.getLeft(), touchY-window.getTop());
+
+            if (prevOnWindow != isOnWindow) {
+                prevOnWindow = isOnWindow;
+                if (isOnWindow)
+                    window.touchIn();
+                else
+                    window.touchOut();
+            }
+        }
+
+        window.update(deltaTime);
+    }
+
+
+    public void drawGUI(Graphics graphics){
+        for (int i=0; i<windows.size();i++)
+            windows.get(i).draw(graphics);
     }
 
 

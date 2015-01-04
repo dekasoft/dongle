@@ -1,6 +1,7 @@
 package com.dekagames.dongle.gui;
 
 import com.dekagames.dongle.Graphics;
+import com.dekagames.dongle.Screen;
 import com.dekagames.dongle.Sprite;
 
 import java.util.ArrayList;
@@ -9,7 +10,8 @@ import java.util.ArrayList;
  * Created by deka on 23.07.14.
  */
 public class Window {
-    protected	WindowManager				manager;
+//    protected	WindowManager				manager;
+    protected   Screen                      screen;
     protected   ArrayList<Control>          controls;
     protected   boolean skinned;
     protected   Sprite spr_skin;
@@ -78,9 +80,25 @@ public class Window {
     }
 
 
-    public void setManager(WindowManager manager){
-        this.manager = manager;
+//    public void setManager(WindowManager manager){
+//        this.manager = manager;
+//    }
+//
+//
+//    public WindowManager getManager(){
+//        return manager;
+//    }
+
+    public void setScreen(Screen screen){
+        this.screen = screen;
     }
+
+
+    public Screen getScreen(){
+        return screen;
+    }
+
+
 
     public boolean isPointIn(float x, float y) {
         return (x>=n_left && x<=n_left+n_width && y>n_top && y<n_top+n_height);
@@ -175,8 +193,8 @@ public class Window {
 
     public void draw(Graphics graphics) {
         if (spr_skin != null) draw_window(graphics);
-        for (int i=0; i<controls.size(); i++)
-            controls.get(i).draw(graphics);
+        for (Control c:controls)
+            c.draw(graphics);
     }
 
     public void update(float delta) {
@@ -192,45 +210,50 @@ public class Window {
         float sprw = spr_skin.getFrameWidth(0);
         float sprh = spr_skin.getFrameHeight(0);
 
-        //	draw top line
-        tmpy = n_top;
+        if (skinned) {      // draw tiled background
+            //	draw top line
+            tmpy = n_top;
 
-        spr_skin.setFrame(0);
-        spr_skin.draw(gr, n_left, tmpy);
+            spr_skin.setFrame(0);
+            spr_skin.draw(gr, n_left, tmpy);
 
-        spr_skin.setFrame(1);
-        for (int i=1; i<n_width_cells-1; i++)
-            spr_skin.draw(gr, n_left+i*sprw, tmpy);
+            spr_skin.setFrame(1);
+            for (int i = 1; i < n_width_cells - 1; i++)
+                spr_skin.draw(gr, n_left + i * sprw, tmpy);
 
-        spr_skin.setFrame(2);
-        spr_skin.draw(gr,n_left+(n_width_cells-1)*sprw,tmpy);
+            spr_skin.setFrame(2);
+            spr_skin.draw(gr, n_left + (n_width_cells - 1) * sprw, tmpy);
 
-        // draw middle part
-        for (int j=1; j<n_height_cells-1; j++) {
-            tmpy = n_top + j*sprh;
-            spr_skin.setFrame(3);
-            spr_skin.draw(gr,n_left,tmpy);
+            // draw middle part
+            for (int j = 1; j < n_height_cells - 1; j++) {
+                tmpy = n_top + j * sprh;
+                spr_skin.setFrame(3);
+                spr_skin.draw(gr, n_left, tmpy);
 
-            spr_skin.setFrame(4);
-            for (int i=1; i<n_width_cells-1; i++)
-                spr_skin.draw(gr, n_left+i*sprw, tmpy);
+                spr_skin.setFrame(4);
+                for (int i = 1; i < n_width_cells - 1; i++)
+                    spr_skin.draw(gr, n_left + i * sprw, tmpy);
 
-            spr_skin.setFrame(5);
-            spr_skin.draw(gr,n_left+(n_width_cells-1)*sprw,tmpy);
+                spr_skin.setFrame(5);
+                spr_skin.draw(gr, n_left + (n_width_cells - 1) * sprw, tmpy);
+            }
+
+            // draw bottom line
+            tmpy = n_top + (n_height_cells - 1) * sprh;
+
+            spr_skin.setFrame(6);
+            spr_skin.draw(gr, n_left, tmpy);
+
+            spr_skin.setFrame(7);
+            for (int i = 1; i < n_width_cells - 1; i++)
+                spr_skin.draw(gr, n_left + i * sprw, tmpy);
+
+            spr_skin.setFrame(8);
+            spr_skin.draw(gr, n_left + (n_width_cells - 1) * sprw, tmpy);
         }
-
-        // draw bottom line
-        tmpy = n_top+(n_height_cells-1)*sprh;
-
-        spr_skin.setFrame(6);
-        spr_skin.draw(gr, n_left,tmpy);
-
-        spr_skin.setFrame(7);
-        for (int i=1; i<n_width_cells-1; i++)
-            spr_skin.draw(gr, n_left+i*sprw, tmpy);
-
-        spr_skin.setFrame(8);
-        spr_skin.draw(gr,n_left+(n_width_cells-1)*sprw, tmpy);
+        else {      // draw simple background image
+            spr_skin.draw(gr, n_left, n_top);
+        }
 
     }
 

@@ -89,17 +89,17 @@ public class Button extends Control{
     }
 
     @Override
-    public boolean controlTouched(boolean down) {
+    public void controlTouched(boolean down) {
         if (!enabled) {
             is_pressed = false;
-            return false;
+            return;// false;
         }
 
         is_pressed = down;
         if (!is_pressed && bVisible) {
             bDone = true;            // window will process this button
         }
-        return is_pressed;
+        return;// is_pressed;
     }
 
     @Override

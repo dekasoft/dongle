@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Created by deka on 23.07.14.
  */
-public abstract class Window {
+public class Window {
     protected   Screen                      screen;
     protected   ArrayList<Control>          controls;
     protected   boolean skinned;
@@ -79,7 +79,9 @@ public abstract class Window {
     }
 
 
-    public abstract void initControls();
+    public void initControls(){
+        controls.clear();
+    }
 
     public void setScreen(Screen screen){
         this.screen = screen;
@@ -133,8 +135,8 @@ public abstract class Window {
     /**
      * вызывается при таче или антаче в окне.
      */
-    public boolean windowTouched(boolean down, float x, float y) {
-        boolean is_any_control_pressed =false;
+    public void windowTouched(boolean down, float x, float y) {
+   //     boolean is_any_control_pressed =false;
 
         for (Control ctrl:controls) {
             if (ctrl.isPointIn(x,y)){
@@ -142,11 +144,11 @@ public abstract class Window {
                 screen.getGame().input.wasUntouched = false;
                 screen.getGame().input.wasTouched = false;
                 ctrl.controlTouched(down);
-                is_any_control_pressed |= down;
+//                is_any_control_pressed |= down;
             }
         }
 
-        return is_any_control_pressed;
+//        return is_any_control_pressed;
     }
 
     /**

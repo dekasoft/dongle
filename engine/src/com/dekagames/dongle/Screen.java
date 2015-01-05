@@ -13,7 +13,7 @@ public abstract  class Screen {
     public boolean              isInitialized;
     protected boolean           prevTouch;
     protected boolean			prevOnWindow;	    // указатель был над окном
-    protected boolean           isAnyCtrlPressed;   // right now!!
+//    protected boolean           isAnyCtrlPressed;   // right now!!
 
 
     public Screen(Game game) {
@@ -64,7 +64,8 @@ public abstract  class Screen {
         if (bTouch != prevTouch) {								// имело место нажатие или отжатие
             prevTouch = bTouch;
             if (isOnWindow) 				// если дело было над окном
-                isAnyCtrlPressed = window.windowTouched(bTouch, touchX-window.getLeft(), touchY-window.getTop());
+                //isAnyCtrlPressed =
+                        window.windowTouched(bTouch, touchX-window.getLeft(), touchY-window.getTop());
         }
 
         // постоянно отслеживаем положение указателя
@@ -105,6 +106,9 @@ public abstract  class Screen {
      * вызывать метод initialize больше одного раза для каждого экземпляра экрана.
      */
     public boolean initialize() {
+//        for(Window w:windows)
+//            w.initControls();
+//
         isInitialized = true;
         return isInitialized;
     }

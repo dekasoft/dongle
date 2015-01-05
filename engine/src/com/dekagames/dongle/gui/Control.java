@@ -60,7 +60,7 @@ public abstract class Control {
     /** Called by parent window when touch or detouch event is occured.
      *  @return true if control is currently touched
      * */
-    public abstract boolean controlTouched(boolean down);
+    public abstract void controlTouched(boolean down);
 
     /** Called by the window when touched pointer is moving above the control  */
     public void touchMove(float x, float y){};

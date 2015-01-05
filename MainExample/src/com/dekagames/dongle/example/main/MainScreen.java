@@ -1,8 +1,11 @@
 package com.dekagames.dongle.example.main;
 
 import com.dekagames.dongle.*;
+import com.dekagames.dongle.gui.Control;
+import com.dekagames.dongle.gui.controls.Button;
 import com.dekagames.slon.Slon;
 import com.dekagames.slon.SlonException;
+import com.dekagames.slon.SlonNode;
 
 import java.io.IOException;
 import java.util.Random;
@@ -12,13 +15,13 @@ import java.util.Random;
  */
 public class MainScreen extends Screen {
     // слон файл
-    private Slon slon;
+    public Slon slon;
 
     // текстура с полоской кадров - 1 способ
     private Texture texAngelStrip;
 
     // текстура с атласом - 2 способ
-    private Texture textureAtlas;
+    public Texture textureAtlas;
 
     // Текстура для модели сделанной в скелетном редакторе
     private Texture textureModel;
@@ -30,10 +33,16 @@ public class MainScreen extends Screen {
     private Sprite  sprAngelStrip, spriteFromAtlas;
 
 
+    // GUI window - needed for gui elements
+    private MainWindow mainWindow;
+    // GUI element - simple button
+//    private Button button;
+
+
 
     private Font font;
 
-    private  Sound sound;
+    public  Sound sound;
 
     private Music music;
 
@@ -45,6 +54,10 @@ public class MainScreen extends Screen {
     public MainScreen(MainGame mainGame){
         super(mainGame);
         rand = new Random(System.currentTimeMillis());
+
+        // create window for controls and add it to screen
+        mainWindow = new MainWindow(game.getVirtualWidth(), game.getVirtualHeight());
+        addWindow(mainWindow);
     }
 
     @Override
@@ -92,6 +105,9 @@ public class MainScreen extends Screen {
         // ------------------------  загрузка шрифта ----------------------------------------------------
         font = new Font(textureAtlas, slon, "fntComic");
 
+        // --------------------------- create controls by call initControls method from GL thread --------
+        mainWindow.initControls();
+
         // ------------------------ загрузка звуов и музыки ------------------------------------
         sound = game.audio.newSound("bird.wav", true);
         music = game.audio.newMusic("polka.ogg", true);
@@ -105,6 +121,8 @@ public class MainScreen extends Screen {
 
     @Override
     public void update(float deltaTime) {
+        super.updateGUI(deltaTime);
+
         sprAngelStrip.update(deltaTime);
         spriteFromAtlas.update(deltaTime);
 
@@ -156,14 +174,20 @@ public class MainScreen extends Screen {
         Primitives.drawPolygon(gr, vert);
 
         // обработка ввода
-        if (game.input.touched[0] && !nowTouched){ // произошла касание
-            nowTouched = true;
+        if (game.input.wasTouched){
             sound.play();
+            game.input.wasTouched = false;
         }
 
-        if (!game.input.touched[0]){
-            nowTouched = false;
-        }
+
+//        if (game.input.touched[0] && !nowTouched){ // произошла касание
+//            nowTouched = true;
+//            sound.play();
+//        }
+//
+//        if (!game.input.touched[0]){
+//            nowTouched = false;
+//        }
 
 
         for (int i=0; i<3; i++){
@@ -173,6 +197,8 @@ public class MainScreen extends Screen {
                 font.drawString(game.graphics,"Pointer "+i, x, y );
             }
         }
+
+        super.drawGUI(gr);
 
         // вывод графики должен заканчиваться end
         gr.end();

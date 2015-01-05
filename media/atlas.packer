@@ -1,48 +1,57 @@
 {
-width="512" height="512" export="D:\my\java\myworks\dongle\example3\assets\atlas.png" 
+width="512" height="512" export="/home/deka/my/java/myworks/dongle/MainExampleAndroidStarter/assets/atlas.png" 
     {
     name="sprites" 
         {
         name="sprMan" crop="true" border="1" 
             {
-            file="D:\my\java\myworks\dongle\media\man0001.png" pivotX="0" pivotY="0" 
+            file="/home/deka/my/java/myworks/dongle/media/man0001.png" pivotX="0" pivotY="0" 
             }
             {
-            file="D:\my\java\myworks\dongle\media\man0002.png" pivotX="0" pivotY="0" 
+            file="/home/deka/my/java/myworks/dongle/media/man0002.png" pivotX="0" pivotY="0" 
             }
             {
-            file="D:\my\java\myworks\dongle\media\man0003.png" pivotX="0" pivotY="0" 
+            file="/home/deka/my/java/myworks/dongle/media/man0003.png" pivotX="0" pivotY="0" 
             }
             {
-            file="D:\my\java\myworks\dongle\media\man0004.png" pivotX="0" pivotY="0" 
+            file="/home/deka/my/java/myworks/dongle/media/man0004.png" pivotX="0" pivotY="0" 
             }
             {
-            file="D:\my\java\myworks\dongle\media\man0005.png" pivotX="0" pivotY="0" 
+            file="/home/deka/my/java/myworks/dongle/media/man0005.png" pivotX="0" pivotY="0" 
             }
             {
-            file="D:\my\java\myworks\dongle\media\man0006.png" pivotX="0" pivotY="0" 
+            file="/home/deka/my/java/myworks/dongle/media/man0006.png" pivotX="0" pivotY="0" 
             }
             {
-            file="D:\my\java\myworks\dongle\media\man0007.png" pivotX="0" pivotY="0" 
+            file="/home/deka/my/java/myworks/dongle/media/man0007.png" pivotX="0" pivotY="0" 
             }
             {
-            file="D:\my\java\myworks\dongle\media\man0008.png" pivotX="0" pivotY="0" 
+            file="/home/deka/my/java/myworks/dongle/media/man0008.png" pivotX="0" pivotY="0" 
             }
             {
-            file="D:\my\java\myworks\dongle\media\man0009.png" pivotX="0" pivotY="0" 
+            file="/home/deka/my/java/myworks/dongle/media/man0009.png" pivotX="0" pivotY="0" 
             }
             {
-            file="D:\my\java\myworks\dongle\media\man0010.png" pivotX="0" pivotY="0" 
+            file="/home/deka/my/java/myworks/dongle/media/man0010.png" pivotX="0" pivotY="0" 
             }
             {
-            file="D:\my\java\myworks\dongle\media\man0011.png" pivotX="0" pivotY="0" 
+            file="/home/deka/my/java/myworks/dongle/media/man0011.png" pivotX="0" pivotY="0" 
+            }
+        }
+        {
+        name="sprButton" crop="false" border="1" 
+            {
+            file="/home/deka/my/java/myworks/dongle/media/button0.png" pivotX="0" pivotY="0" 
+            }
+            {
+            file="/home/deka/my/java/myworks/dongle/media/button1.png" pivotX="0" pivotY="0" 
             }
         }
     }
     {
     name="fonts" 
         {
-        name="fntComic" family="Comic Sans MS" glyphs=" ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя#~0123456789.,()-+*//@%!?:;" size="33" border="1" outline="2" bold="true" italic="false" 
+        name="fntComic" family="BIP" glyphs=" ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя#~0123456789.,()-+*//@%!?:;" size="33" border="1" outline="2" bold="true" italic="false" 
         }
     }
 }

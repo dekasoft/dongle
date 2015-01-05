@@ -1,6 +1,7 @@
 package com.dekagames.dongle;
 
 
+import com.dekagames.dongle.gui.Control;
 import com.dekagames.dongle.gui.Window;
 
 import java.util.ArrayList;
@@ -8,19 +9,16 @@ import java.util.ArrayList;
 public abstract  class Screen {
 
     protected ArrayList<Window> windows;        // gui windows this screen managed. By default one window was created
-    protected Window            mainWindow;
     protected final Game        game;
     public boolean              isInitialized;
     protected boolean           prevTouch;
     protected boolean			prevOnWindow;	    // указатель был над окном
     protected boolean           isAnyCtrlPressed;   // right now!!
 
+
     public Screen(Game game) {
         this.game = game;
         windows = new ArrayList<Window>();
-        mainWindow = new Window(game.virtualWidth, game.virtualHeight);
-        mainWindow.setScreen(this);
-        windows.add(mainWindow);
     }
 
 
@@ -32,12 +30,13 @@ public abstract  class Screen {
     }
 
 
-    public void removeTopWindow(){
+    public void removeTopWindow() {
         if (windows.size()>1){
             windows.get(windows.size()-1).setScreen(null);
             windows.remove(windows.size()-1);
         }
     }
+
 
     public Window getTopWindow() {
         return windows.get(windows.size()-1);
@@ -49,9 +48,11 @@ public abstract  class Screen {
     }
 
 
-    public void updateGUI(float deltaTime){
+    public Control updateGUI(float deltaTime) {
+        if (windows.size()<=0) return null;
+
         Window window = windows.get(windows.size()-1);		// получим верхнее окно которому будем посылать сообщения
-        if (window == null) return;
+        if (window == null) return null;
 
         boolean bTouch = game.input.touched[0];
         float touchX = game.input.touchX[0];
@@ -66,7 +67,6 @@ public abstract  class Screen {
                 isAnyCtrlPressed = window.windowTouched(bTouch, touchX-window.getLeft(), touchY-window.getTop());
         }
 
-
         // постоянно отслеживаем положение указателя
         if (bTouch) {
             if (isOnWindow)
@@ -80,14 +80,12 @@ public abstract  class Screen {
                     window.touchOut();
             }
         }
-
-        window.update(deltaTime);
+        return window.update(deltaTime);
     }
 
 
     public void drawGUI(Graphics graphics){
-        for (int i=0; i<windows.size();i++)
-            windows.get(i).draw(graphics);
+        for (Window w:windows) w.draw(graphics);
     }
 
 

@@ -9,15 +9,14 @@ import java.util.ArrayList;
 /**
  * Created by deka on 23.07.14.
  */
-public class Window {
-//    protected	WindowManager				manager;
+public abstract class Window {
     protected   Screen                      screen;
     protected   ArrayList<Control>          controls;
     protected   boolean skinned;
     protected   Sprite spr_skin;
     protected	int							n_top, n_left, n_width, n_height;		// положение в пикселях базового экрана
     protected	int							n_width_cells, n_height_cells;			// размеры окна в спрайтах
-    protected	Control				        prev_control, now_control, done_control;
+    protected	Control				        prev_control, now_control;//, done_control;
 
 
     /**
@@ -80,14 +79,7 @@ public class Window {
     }
 
 
-//    public void setManager(WindowManager manager){
-//        this.manager = manager;
-//    }
-//
-//
-//    public WindowManager getManager(){
-//        return manager;
-//    }
+    public abstract void initControls();
 
     public void setScreen(Screen screen){
         this.screen = screen;
@@ -127,15 +119,15 @@ public class Window {
         controls.add(c);
     }
 
-    public Control getLastDoneControl() {
-        return done_control;
-    }
+//    public Control getLastDoneControl() {
+//        return done_control;
+//    }
 
-    public void resetDoneControl() {
-        if (done_control == null) return;
-        done_control.bDone = false;
-        done_control = null;
-    }
+//    public void resetDoneControl() {
+//        if (done_control == null) return;
+//        done_control.bDone = false;
+//        done_control = null;
+//    }
 
 
     /**
@@ -146,6 +138,9 @@ public class Window {
 
         for (Control ctrl:controls) {
             if (ctrl.isPointIn(x,y)){
+                // if click was in control's area - clear touched flags
+                screen.getGame().input.wasUntouched = false;
+                screen.getGame().input.wasTouched = false;
                 ctrl.controlTouched(down);
                 is_any_control_pressed |= down;
             }
@@ -197,12 +192,13 @@ public class Window {
             c.draw(graphics);
     }
 
-    public void update(float delta) {
-        for (Control ctrl:controls){
-            if (ctrl.update(delta)) {
-                done_control = ctrl;
-            }
-        }
+    public Control update(float delta) {
+        Control doneCtrl = null;
+        for (Control ctrl:controls)
+            if (ctrl.update(delta))
+                doneCtrl = ctrl;
+
+        return doneCtrl;
     }
 
     protected void draw_window(Graphics gr) {

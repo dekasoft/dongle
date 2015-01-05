@@ -80,7 +80,6 @@ public class Button extends Control{
                 else 			sprite.setFrame(0);
             }
         }
-
         sprite.draw(graphics, fx+parent.getLeft(), fy+parent.getTop());
     }
 

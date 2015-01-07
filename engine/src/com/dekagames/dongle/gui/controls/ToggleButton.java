@@ -8,6 +8,7 @@ import com.dekagames.slon.SlonNode;
  * Created by deka on 07.01.15.
  */
 public class ToggleButton extends Button {
+    private boolean wait_touch_up;   // wait touch up after touch down to skip any action
 
 
     public ToggleButton(Texture tex, SlonNode node, float x, float y) {
@@ -37,14 +38,19 @@ public class ToggleButton extends Button {
     public void controlTouched(boolean down) {
         if (bVisible) {
             if (is_pressed) {
-                if (!down) {
-                    is_pressed = false;      // button up with touch up
-                    bDone = true;
+                if (wait_touch_up)              // skip touch up immediately after touch down
+                    wait_touch_up = false;
+                else {
+                    if (!down) {
+                        is_pressed = false;      // button up with touch up
+                        bDone = true;
+                    }
                 }
             } else {
                 if (down) {
                     is_pressed = true;
                     bDone = true;
+                    wait_touch_up = true;
                 }
             }
         }
@@ -53,11 +59,11 @@ public class ToggleButton extends Button {
 
     @Override
     public void touchIn() {
-        controlTouched(true);
+        // NOTHING TO DO HERE!!!!
     }
 
     @Override
     public void touchOut() {
-        controlTouched(false);
+        wait_touch_up = false;
     }
 }

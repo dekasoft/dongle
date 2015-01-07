@@ -3,6 +3,7 @@ package com.dekagames.dongle.example.main;
 import com.dekagames.dongle.gui.Control;
 import com.dekagames.dongle.gui.Window;
 import com.dekagames.dongle.gui.controls.Button;
+import com.dekagames.dongle.gui.controls.ToggleButton;
 import com.dekagames.slon.SlonNode;
 
 /**
@@ -10,6 +11,7 @@ import com.dekagames.slon.SlonNode;
  */
 public class MainWindow extends Window {
     public Button button;
+    public ToggleButton toggleButton;
 
     public MainWindow(int width, int height) {
         super(width, height);
@@ -22,7 +24,9 @@ public class MainWindow extends Window {
         SlonNode nodeButton = nodeSprites.getChildWithKeyValue("name", "sprButton");
 
         button = new Button(2, scr.textureAtlas, nodeButton, 0, 0);
+        toggleButton = new ToggleButton(scr.textureAtlas, nodeButton, 500, 200);
         addCtrl(button);
+        addCtrl(toggleButton);
     }
 
     @Override
@@ -31,6 +35,10 @@ public class MainWindow extends Window {
 
         if (ctrl == button){
             buttonPressed();
+        }
+
+        if (ctrl == toggleButton){
+            toggleButtonPressed();
         }
         return ctrl;
     }
@@ -41,4 +49,11 @@ public class MainWindow extends Window {
         MainScreen scr = (MainScreen)getScreen();
         scr.sound.play();
     }
+
+
+    public void toggleButtonPressed(){
+        MainScreen scr = (MainScreen)getScreen();
+        scr.sound.play();
+    }
+
 }

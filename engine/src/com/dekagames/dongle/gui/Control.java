@@ -11,7 +11,7 @@ import com.dekagames.dongle.Graphics;
  */
 public abstract class Control {
     protected   Window      parent;
-    protected	float		scale;
+//    protected	float		scale;
     public 		float 		fx,fy, fwidth, fheight;
     /** Flag, if its true, than parent window must process this control  */
     public		boolean		bDone;

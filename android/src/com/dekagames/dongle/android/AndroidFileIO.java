@@ -52,4 +52,10 @@ public class AndroidFileIO implements FileIO {
         return os;
     }
 
+    @Override
+    public boolean isFileExists(String filename) {
+        File f = new File(externalStoragePath+filename);
+        return (!f.isDirectory() && f.exists());
+    }
+
 }

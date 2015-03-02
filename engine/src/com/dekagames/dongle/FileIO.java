@@ -9,5 +9,7 @@ public interface FileIO {
     public InputStream readFile(String filename);
 
     public OutputStream writeFile(String filename);
+
+    public boolean isFileExists(String filename);
 }
 

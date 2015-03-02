@@ -104,6 +104,7 @@ public class Button extends Control{
 
     @Override
     public void touchIn() {
+//        System.out.println("touch in");
         if (!enabled)
             is_pressed = false;
         else
@@ -112,7 +113,13 @@ public class Button extends Control{
 
     @Override
     public void touchOut() {
+//        System.out.println("touch out");
         is_pressed = false;
     }
+
+//    @Override
+//    public void touchMove(float x, float y) {
+//        System.out.println("touch move");
+//    }
 
 }

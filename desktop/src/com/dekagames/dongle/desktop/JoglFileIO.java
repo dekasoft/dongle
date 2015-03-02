@@ -53,4 +53,10 @@ public class JoglFileIO implements FileIO {
     public OutputStream writeFile(String filename) {
         return null;
     }
+
+    @Override
+    public boolean isFileExists(String filename){
+        File f = new File(filename);
+        return (!f.isDirectory() && f.exists());
+    }
 }

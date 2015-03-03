@@ -11,5 +11,9 @@ public interface FileIO {
     public OutputStream writeFile(String filename);
 
     public boolean isFileExists(String filename);
+
+    public boolean isDirectoryExists(String dirname);
+
+    public void createDirectory(String dirname);
 }
 

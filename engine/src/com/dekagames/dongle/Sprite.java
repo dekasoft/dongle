@@ -733,6 +733,20 @@ public class Sprite {
 
 
     /**
+     * Set full sprite color in the ARGB format.
+     * @param argbColor color in ARGB format (i.e. 0xAARRGGBB).
+     */
+    public void setARGBColor(int argbColor){
+        byte alpha = (byte)((argbColor>>24) & 0xFF);
+        byte red = (byte)((argbColor>>16) & 0xFF);
+        byte green = (byte)((argbColor>>8) & 0xFF);
+        byte blue = (byte)(argbColor & 0xFF);
+        setColor(red/255.0f, green/255.0f, blue/255.0f);
+        setAlpha(alpha/255.0f);
+    }
+
+
+    /**
      * Устанавливает прозрачность спрайта.
      * @param a альфа составляющая цвета (0..1)
      */

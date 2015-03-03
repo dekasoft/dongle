@@ -59,4 +59,16 @@ public class JoglFileIO implements FileIO {
         File f = new File(filename);
         return (!f.isDirectory() && f.exists());
     }
+
+    @Override
+    public boolean isDirectoryExists(String dirname){
+        File f = new File(dirname);
+        return (f.isDirectory() && f.exists());
+    }
+
+    @Override
+    public void createDirectory(String dirname){
+        File f = new File(dirname);
+        f.mkdirs();
+    }
 }

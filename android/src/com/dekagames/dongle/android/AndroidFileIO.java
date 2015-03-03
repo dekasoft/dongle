@@ -58,4 +58,18 @@ public class AndroidFileIO implements FileIO {
         return (!f.isDirectory() && f.exists());
     }
 
+
+    @Override
+    public boolean isDirectoryExists(String dirname){
+        File f = new File(externalStoragePath+dirname);
+        return (f.isDirectory() && f.exists());
+    }
+
+    @Override
+    public void createDirectory(String dirname){
+        File f = new File(externalStoragePath+dirname);
+        f.mkdirs();
+    }
+
+
 }

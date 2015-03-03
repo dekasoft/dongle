@@ -139,6 +139,7 @@ public class MainScreen extends Screen {
         gr.begin();
 
         //выводим спрайт созданный из полоски
+        sprAngelStrip.setARGBColor(0xFEFDFCFB);
         sprAngelStrip.draw(gr, 100, 100);
 
         // выводим спрайт загруженный из атласа

@@ -3,7 +3,7 @@ width="512" height="512" export="/home/deka/my/java/myworks/dongle/MainExampleAn
     {
     name="sprites" 
         {
-        name="sprMan" crop="true" border="1" 
+        name="sprMan" outline="true" crop="true" border="1" 
             {
             file="/home/deka/my/java/myworks/dongle/media/man0001.png" pivotX="0" pivotY="0" 
             }
@@ -39,7 +39,7 @@ width="512" height="512" export="/home/deka/my/java/myworks/dongle/MainExampleAn
             }
         }
         {
-        name="sprButton" crop="false" border="1" 
+        name="sprButton" outline="false" crop="false" border="1" 
             {
             file="/home/deka/my/java/myworks/dongle/media/button0.png" pivotX="0" pivotY="0" 
             }
@@ -51,7 +51,7 @@ width="512" height="512" export="/home/deka/my/java/myworks/dongle/MainExampleAn
     {
     name="fonts" 
         {
-        name="fntComic" family="BIP" glyphs=" ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя#~0123456789.,()-+*//@%!?:;" size="33" border="1" outline="2" bold="true" italic="false" 
+        name="fntComic" family="BIP" glyphs="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz#~0123456789.,()-+*//@%!?:;" size="33" border="1" outline="2" bold="true" italic="false" 
         }
     }
 }

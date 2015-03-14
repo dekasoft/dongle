@@ -33,6 +33,10 @@ class Glyph {
 }
 
 public class Font {
+    /** Space width. It is calculated as average glyph width during loading. */
+    public int spaceWidth;                              // ширина пробела. вычисляется при загрузке.
+
+
     public HashMap <Character, Glyph> glyphMap;         // карта символов
     private Texture texture_;
     private Slon slon_;
@@ -79,6 +83,7 @@ public class Font {
         int texHeight = texture_.height;
 
         int glyphsAmount = fontNode.getChildCount();
+        spaceWidth = 0;                         // initial value
         for (int i=0; i<glyphsAmount; i++){
             Glyph glyph = new Glyph();
             SlonNode glyphNode = fontNode.getChildAt(i);
@@ -91,13 +96,13 @@ public class Font {
             int h = glyphNode.getKeyAsInt("h");
             float lsb = glyphNode.getKeyAsFloat("lsb");
             float adv = glyphNode.getKeyAsFloat("advance");
-            float origY = glyphNode.getKeyAsInt("originY");
+            float origY = glyphNode.getKeyAsFloat("originY");
 
             // скорректируем на половину пикселя, чтобы правильнее считались координаты
             float tx1 = (float)x;// + 0.5f;
-            float tx2 = (float)x + (float)w + 0.5f;
+            float tx2 = (float)x + (float)w -1;//+ 0.5f;
             float ty1 = (float)y;// + 0.5f;
-            float ty2 = (float)y + (float)h + 0.5f;
+            float ty2 = (float)y + (float)h -1;//+ 0.5f;
 
             // рассчитаем текстурные координаты
             glyph.s1 = tx1/(float)texWidth;			glyph.t1 = ty1/(float)texHeight;
@@ -109,6 +114,7 @@ public class Font {
 
             // размеры кадра
             glyph.w = w;
+            spaceWidth+=w;
             glyph.h = h;
             // горячая точка
             glyph.lsb = lsb;
@@ -118,6 +124,7 @@ public class Font {
             // добавим в карту глифов
             glyphMap.put(character,glyph);
         }
+        spaceWidth = Math.round(0.8f*spaceWidth/glyphsAmount);
     }
 
     // рисуем Glyph с координатами origin x,y
@@ -160,10 +167,19 @@ public class Font {
 
         for (int i=0; i<text.length(); i++){
             Character c = text.charAt(i);
-            Glyph g = glyphMap.get(c);
-            if (g!=null) {
-                draw_glyph(graphics,g,tempX,y);//+g.origy);
-                tempX += g.advance;
+
+            if (c.equals(' ')){
+                tempX += spaceWidth;
+                continue;
+            } else {
+                Glyph g = glyphMap.get(c);
+                if (g != null) {
+                    draw_glyph(graphics, g, tempX, y);//+g.origy);
+                    tempX += g.advance;
+                } else {
+                    tempX += spaceWidth;
+                }
+
             }
         }
     }

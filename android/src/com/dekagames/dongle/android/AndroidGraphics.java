@@ -65,9 +65,7 @@ public class AndroidGraphics  extends Graphics {
     // используется при повторной перезагрузке ранее загруженных текстур после потери контекста
     @Override
     protected void reload_texture_from_file(Texture texture){
-        InputStream is = null;
-
-        is = game.fileIO.readAsset(texture.filename);
+        InputStream is = game.fileIO.readAsset(texture.filename);
         Bitmap bitmap = BitmapFactory.decodeStream(is);
         texture.width = bitmap.getWidth();
         texture.height = bitmap.getHeight();

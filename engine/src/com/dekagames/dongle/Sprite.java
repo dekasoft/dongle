@@ -245,21 +245,20 @@ public class Sprite {
 
     // создает кадр в массиве кадров с индексом и размерами
     private final void set_frame_coords(int frame, int x, int y, int w, int h, int piv_x, int piv_y) {
-        // скорректируем на половину пикселя, чтобы правильнее считались координаты
-        float tx1 = (float)x + 0.5f;
-        float tx2 = (float)x + (float)w - 0.5f;
-        float ty1 = (float)y + 0.5f;
-        float ty2 = (float)y + (float)h - 0.5f;
+        float tx1 = x;// + 0.5f;
+        float tx2 = x + w;// - 0.5f;
+        float ty1 = y;// + 0.5f;
+        float ty2 = y + h;// - 0.5f;
 
         // запишем координаты
         frames[frame] = new Frame();
 
-        frames[frame].s1 = tx1/(float)tex_width;			frames[frame].t1 = ty1/(float)tex_height;
-        frames[frame].s2 = tx2/(float)tex_width;			frames[frame].t2 = ty1/(float)tex_height;
-        frames[frame].s3 = tx1/(float)tex_width;			frames[frame].t3 = ty2/(float)tex_height;
-        frames[frame].s4 = frames[frame].s2;			    frames[frame].t4 = frames[frame].t2;
-        frames[frame].s5 = tx2/(float)tex_width;			frames[frame].t5 = ty2/(float)tex_height;
-        frames[frame].s6 = frames[frame].s3;			    frames[frame].t6 = frames[frame].t3;
+        frames[frame].s1 = tx1/tex_width;			frames[frame].t1 = ty1/tex_height;
+        frames[frame].s2 = tx2/tex_width;			frames[frame].t2 = ty1/tex_height;
+        frames[frame].s3 = tx1/tex_width;			frames[frame].t3 = ty2/tex_height;
+        frames[frame].s4 = frames[frame].s2;		frames[frame].t4 = frames[frame].t2;
+        frames[frame].s5 = tx2/tex_width;			frames[frame].t5 = ty2/tex_height;
+        frames[frame].s6 = frames[frame].s3;		frames[frame].t6 = frames[frame].t3;
 
         // размеры кадра
         frames[frame].w = w;

@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import static com.dekagames.dongle.GLCommon.*;
+
 /**
  * Created by deka on 16.06.14.
  */
@@ -58,7 +60,11 @@ public class AndroidGraphics  extends Graphics {
     }
 
 
-
+    @Override
+    public void init(int physical_width, int physical_height){
+        super.init(physical_width, physical_height);
+        gl.glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA); // !!!!!!       // for android
+    }
 
 
     // перечитывает текстуру из файла, записывает ее в готовый уже Id

@@ -172,9 +172,11 @@ public abstract class Graphics {
         gl.glDisable(GL_LIGHTING);
         gl.glDisable(GL_SCISSOR_TEST);
 
-        // для прозрачности
+        // для прозрачности разные установки для платформ хз почему
         gl.glEnable(GL_BLEND);
-        gl.glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA); // !!!!!!
+//        gl.glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA); // !!!!!!       // for android
+//        gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // !!!!!! // for desktop
+
 
         // Устанавливаем viewport  в соответствии с виртуальным экраном.
         gl.glViewport(XOFFSET, YOFFSET, viewportWidth, viewportHeight);

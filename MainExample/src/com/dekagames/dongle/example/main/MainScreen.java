@@ -49,10 +49,16 @@ public class MainScreen extends Screen {
     private Random rand;
 
     private float fangle;
-    private boolean nowTouched;
+//    private boolean nowTouched;
+
+    private int lastKeyUp;
+
 
     public MainScreen(MainGame mainGame){
         super(mainGame);
+
+//        game.input.catchBackKey = true;
+
         rand = new Random(System.currentTimeMillis());
 
         // create window for controls and add it to screen
@@ -62,6 +68,9 @@ public class MainScreen extends Screen {
 
     @Override
     public boolean initialize(){
+        // вся работа с input должна делаться в потоке GL
+        game.input.catchBackKey = true;
+
         // ----------  1 способ - загрузка текстуры с полоской кадров -----------------------
         texAngelStrip = game.graphics.createTexture("angel.png");
         // создание спрайта из полоски кадров
@@ -122,6 +131,10 @@ public class MainScreen extends Screen {
     @Override
     public void update(float deltaTime) {
         super.updateGUI(deltaTime);
+
+        lastKeyUp = game.input.getLastKeyUp();
+        if (lastKeyUp == Input.BACK)
+            System.out.println("BAck button up!");
 
         sprAngelStrip.update(deltaTime);
         spriteFromAtlas.update(deltaTime);

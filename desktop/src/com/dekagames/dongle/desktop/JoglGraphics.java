@@ -10,6 +10,8 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 
+import static com.dekagames.dongle.GLCommon.*;
+
 /**
  * Created by deka on 26.06.14.
  */
@@ -45,6 +47,14 @@ public class JoglGraphics extends Graphics{
         gl.glDeleteTextures(1,texureIds,0);
         game.getManagedTextures().remove(texture);
     }
+
+
+    @Override
+    public void init(int physical_width, int physical_height){
+        super.init(physical_width, physical_height);
+        gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // !!!!!!       // for desktop
+    }
+
 
     @Override
     protected void reload_texture_from_file(Texture texture) {

@@ -63,9 +63,14 @@ public class Sprite {
 
     private  Frame[]	frames;
 
+    // the number of the frames in required order
+    private int         frameIndexes[];
+
     private int						n_frames;
     private int						n_fps;
     private int						n_tx, n_ty;		                    		// текстурные координаты и размеры кадра (если все кадры одинаковые)
+
+    // frame indexes from frameIndexes[]. By default init frame index is equal to frame number in frames[]
     private int						n_curr_frame, n_start_frame, n_end_frame;
 
     private boolean					b_flip_h, b_flip_v;							// будет ли спрайт рисоваться отраженным по вертикали или горизонталм
@@ -270,6 +275,10 @@ public class Sprite {
 
     // начальная инициализация спрайта
     private final void default_init() {
+        // инициализируем массив номеров кадров так как они идут по умолчанию (0,1,2,3... и т.д.)
+        frameIndexes = new int[n_frames];
+        for (int i=0; i<n_frames; i++)
+            frameIndexes[i] = i;
         setFrame(0);
         setColor(1, 1, 1);
         setAlpha(1);
@@ -313,6 +322,10 @@ public class Sprite {
     }
 
 
+    public void setFrameIndexes(int[] indexes){
+        frameIndexes = indexes;
+    }
+
     /**
      * Запуск воспроизведения с указанием начального и конечного кадров. Метод только
      * устанавливает начальные параметры и необходимость воспроизведения анимации.
@@ -350,7 +363,7 @@ public class Sprite {
         b_loop = loop;
         n_start_frame = 0;
         n_curr_frame = 0;
-        n_end_frame = n_frames-1;
+        n_end_frame = frameIndexes.length-1;//n_frames-1;
         f_delta = 0;
     }
 
@@ -527,12 +540,12 @@ public class Sprite {
             f_delta -= f_fixed_delta;
             if(n_curr_frame + 1 > n_end_frame)	{
                 if (b_loop)
-                    setFrame(n_start_frame);
+                    setFrame(frameIndexes[n_start_frame]);
                 else
                     b_playing = false;
             }
             else
-                setFrame(n_curr_frame+1);
+                setFrame(frameIndexes[n_curr_frame+1]);
         }
     }
 

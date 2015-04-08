@@ -1,11 +1,7 @@
 package com.dekagames.dongle;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Deka
- * Date: 29.09.13
- * Time: 0:54
- * To change this template use File | Settings | File Templates.
+ * This class represents vertex data transferred to vertex shader.
  */
 public class Vertex {
     public static int VERTEX_SIZE = 8 * 4;
@@ -17,6 +13,7 @@ public class Vertex {
     public float a;
     public float s;         // texture coordinates s,t
     public float t;
+
 
     public Vertex(float x, float y, float r, float g, float b, float a, float s, float t) {
         this.x = x;

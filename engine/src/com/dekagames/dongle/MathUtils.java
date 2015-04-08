@@ -39,9 +39,6 @@ public class MathUtils {
         return sinTable[a];
     }
 
-
-
-
     // поворот на угол относительно точки x0, y0 угол в градусах быстрая библиотека - проблемы с
     // с округлением при малых углах!!!!!
     public static Point rotatePointDeg(float x0, float y0, float x1, float y1, float angle){

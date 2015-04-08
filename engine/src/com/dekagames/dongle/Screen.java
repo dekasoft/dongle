@@ -1,6 +1,5 @@
 package com.dekagames.dongle;
 
-
 import com.dekagames.dongle.gui.Control;
 import com.dekagames.dongle.gui.Window;
 
@@ -9,7 +8,7 @@ import java.util.ArrayList;
 public abstract  class Screen {
 
     protected ArrayList<Window> windows;        // gui windows this screen managed. By default one window was created
-    protected final Game        game;
+    private final Game        game;
     public boolean              isInitialized;
     protected boolean           prevTouch;
     protected boolean			prevOnWindow;	    // указатель был над окном

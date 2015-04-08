@@ -62,24 +62,24 @@ public class MainScreen extends Screen {
         rand = new Random(System.currentTimeMillis());
 
         // create window for controls and add it to screen
-        mainWindow = new MainWindow(game.getVirtualWidth(), game.getVirtualHeight());
+        mainWindow = new MainWindow(getGame().getVirtualWidth(), getGame().getVirtualHeight());
         addWindow(mainWindow);
     }
 
     @Override
     public boolean initialize(){
         // вся работа с input должна делаться в потоке GL
-        game.input.catchBackKey = true;
+        getGame().input.catchBackKey = true;
 
         // ----------  1 способ - загрузка текстуры с полоской кадров -----------------------
-        texAngelStrip = game.graphics.createTexture("angel.png");
+        texAngelStrip = getGame().graphics.createTexture("angel.png");
         // создание спрайта из полоски кадров
         sprAngelStrip = new Sprite(texAngelStrip,16,10,0,0,64,64);
         sprAngelStrip.play(true);       // запуск анимации
 
 
         // ----------  2 способ - загрузка текстуры с атласом кадров -----------------------
-        textureAtlas = game.graphics.createTexture("atlas.png");          // спрайт с кадрами упакованными в атлас
+        textureAtlas = getGame().graphics.createTexture("atlas.png");          // спрайт с кадрами упакованными в атлас
         // слон файл с параметрами атласа
         slon = new Slon();
         try {
@@ -100,13 +100,13 @@ public class MainScreen extends Screen {
 
 
         // ----------  2 способ - загрузка не спрайта, а скелетной модели -----------------------
-        textureModel = game.graphics.createTexture("hero.model.png");
+        textureModel = getGame().graphics.createTexture("hero.model.png");
         // скелетная модель содержит мини атлас всех своих костей, который, обычно, склеивается с  общим
         // атласом в качестве кадра спрайта, поэтому для загрузки модель использует не текстуру
         // а только область текстуры. В нашем тестовом примере мини-атлас модели хранится сам по себе, а не
         // в общем атласе, поэтому просто создадим TextureRegion из всей текстуры
         TextureRegion region = new TextureRegion(textureModel,0,0,textureModel.width, textureModel.height);
-        model = new SkeletonModel(game, region, "hero.model", 10);
+        model = new SkeletonModel(getGame(), region, "hero.model", 10);
         model.setFlip(true, false);     // отражение модели - просто для примера
         model.play(true);               // запуск анимации
 
@@ -118,8 +118,8 @@ public class MainScreen extends Screen {
         mainWindow.initControls();
 
         // ------------------------ загрузка звуов и музыки ------------------------------------
-        sound = game.audio.newSound("bird.wav", true);
-        music = game.audio.newMusic("polka.ogg", true);
+        sound = getGame().audio.newSound("bird.wav", true);
+        music = getGame().audio.newMusic("polka.ogg", true);
 
         music.play();
 
@@ -132,7 +132,7 @@ public class MainScreen extends Screen {
     public void update(float deltaTime) {
         super.updateGUI(deltaTime);
 
-        lastKeyUp = game.input.getLastKeyUp();
+        lastKeyUp = getGame().input.getLastKeyUp();
         if (lastKeyUp == Input.BACK)
             System.out.println("BAck button up!");
 
@@ -170,7 +170,7 @@ public class MainScreen extends Screen {
 
         // выведем FPS загруженным шрифтом
         font.setColor(1,0,0,1);
-        font.drawString(gr,"Hello world! FPS: "+game.getFPS(), 200,100);
+        font.drawString(gr,"Hello world! FPS: " + getGame().getFPS(), 200,100);
 
         // draw primitives
         Primitives.drawPoint(gr, 1, 1);
@@ -188,9 +188,9 @@ public class MainScreen extends Screen {
         Primitives.drawPolygon(gr, vert);
 
         // обработка ввода
-        if (game.input.wasTouched){
+        if (getGame().input.wasTouched){
             sound.play();
-            game.input.wasTouched = false;
+            getGame().input.wasTouched = false;
         }
 
 
@@ -205,10 +205,10 @@ public class MainScreen extends Screen {
 
 
         for (int i=0; i<3; i++){
-            if (game.input.touched[i]) {
-                float x = game.input.touchX[i];
-                float y = game.input.touchY[i];
-                font.drawString(game.graphics,"Pointer "+i, x, y );
+            if (getGame().input.touched[i]) {
+                float x = getGame().input.touchX[i];
+                float y = getGame().input.touchY[i];
+                font.drawString(getGame().graphics,"Pointer "+i, x, y );
             }
         }
 

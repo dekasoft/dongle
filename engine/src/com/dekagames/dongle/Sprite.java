@@ -70,8 +70,9 @@ public class Sprite {
     private int						n_fps;
     private int						n_tx, n_ty;		                    		// текстурные координаты и размеры кадра (если все кадры одинаковые)
 
-    // frame indexes from frameIndexes[]. By default init frame index is equal to frame number in frames[]
-    private int						n_curr_frame, n_start_frame, n_end_frame;
+    // frame indexes from frameIndexes[].
+    private int                     curr_index;
+    private int                     n_curr_frame, n_start_frame, n_end_frame;
 
     private boolean					b_flip_h, b_flip_v;							// будет ли спрайт рисоваться отраженным по вертикали или горизонталм
     private boolean					b_loop;
@@ -275,10 +276,6 @@ public class Sprite {
 
     // начальная инициализация спрайта
     private final void default_init() {
-        // инициализируем массив номеров кадров так как они идут по умолчанию (0,1,2,3... и т.д.)
-        frameIndexes = new int[n_frames];
-        for (int i=0; i<n_frames; i++)
-            frameIndexes[i] = i;
         setFrame(0);
         setColor(1, 1, 1);
         setAlpha(1);
@@ -322,9 +319,18 @@ public class Sprite {
     }
 
 
-    public void setFrameIndexes(int[] indexes){
-        frameIndexes = indexes;
-    }
+//    /**
+//     * Set array of indexes of the frames in order they need to appear in animation.
+//     * For example: we have sprite with 3 frames (0,1,2). We can use this
+//     * method to set certain sequence of frames (e.g [0,0,0,1,1,2,1,0]) and this sequence will be used
+//     * for playing sprite animation. By default, this array is initialized with the natural sequence [0,1,2].
+//     * Methods like {@link com.dekagames.dongle.Sprite#play(int, int, boolean)} retrieve parameters which are
+//     * actually indexes of the frames in this array.
+//     * @param indexes
+//     */
+//    public void setFrameIndexes(int[] indexes){
+//        frameIndexes = indexes;
+//    }
 
     /**
      * Запуск воспроизведения с указанием начального и конечного кадров. Метод только
@@ -338,7 +344,8 @@ public class Sprite {
      *  @param loop требуется ли воспроизводить анимацию по кругу или нет.
      */
     public void play(int nstart, int nend, boolean loop){
-        if (b_playing && (nstart==n_start_frame) && (nend==n_end_frame)) return;
+        frameIndexes = null;
+        if (b_playing && (nstart== n_start_frame) && (nend== n_end_frame)) return;
         b_playing = true;
         b_loop = loop;
         n_start_frame = nstart;
@@ -358,13 +365,33 @@ public class Sprite {
      *  @param loop требуется ли воспроизводить анимацию по кругу или нет.
      */
     public void play(boolean loop){
+        frameIndexes = null;
         if (b_playing) return;
         b_playing = true;
         b_loop = loop;
         n_start_frame = 0;
         n_curr_frame = 0;
-        n_end_frame = frameIndexes.length-1;//n_frames-1;
+        n_end_frame = n_frames-1;
         f_delta = 0;
+    }
+
+    /**
+     * Start play animation. Frames appear in order from indexes parameter.
+     * @param indexes
+     * @param loop
+     */
+    public void play(int[] indexes, boolean loop){
+        if (b_playing) return;
+        frameIndexes = indexes;
+        b_playing = true;
+        b_loop = loop;
+
+        curr_index = 0;
+//        n_start_frame = 0;
+//        n_curr_frame = 0;
+//        n_end_frame = n_frames-1;
+        f_delta = 0;
+
     }
 
 
@@ -538,14 +565,28 @@ public class Sprite {
         // найдем текущий кадр
         while(f_delta >= f_fixed_delta) {
             f_delta -= f_fixed_delta;
-            if(n_curr_frame + 1 > n_end_frame)	{
-                if (b_loop)
-                    setFrame(frameIndexes[n_start_frame]);
+            if (frameIndexes == null){                      // regular playing actual frames
+                if(n_curr_frame + 1 > n_end_frame)	{
+                    if (b_loop)
+                        setFrame(n_start_frame);
+                    else
+                        b_playing = false;
+                }
                 else
-                    b_playing = false;
+                    setFrame(n_curr_frame +1);
+            } else {                                        // playing indexed frames
+                if (curr_index<frameIndexes.length-1){
+                    curr_index++;
+                    setFrame(frameIndexes[curr_index]);
+                } else {
+                    if (b_loop){
+                        curr_index = 0;
+                        setFrame(frameIndexes[curr_index]);
+                    } else
+                        b_playing= false;
+                }
+
             }
-            else
-                setFrame(frameIndexes[n_curr_frame+1]);
         }
     }
 

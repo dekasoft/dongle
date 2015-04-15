@@ -80,7 +80,7 @@ public abstract class Graphics {
 
 
     public final void clearScreen(float r, float g, float b){
-        gl.glClearColor(r,g,b,1);
+        gl.glClearColor(r, g, b, 1);
         gl.glClear(GLCommon.GL_COLOR_BUFFER_BIT);
     }
 
@@ -136,6 +136,9 @@ public abstract class Graphics {
         // обнулим счетчик спрайтов - мы их уже нарисовали
         spritesCount = 0;
         vertexCount = 0;
+        if (currentTexture != null){
+            gl.glBindTexture(GLCommon.GL_TEXTURE_2D, 0);
+        }
         currentTexture = null;
         isFirstDrawCall = true;
     }

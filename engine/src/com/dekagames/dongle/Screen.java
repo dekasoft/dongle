@@ -20,6 +20,10 @@ public abstract  class Screen {
         windows = new ArrayList<Window>();
     }
 
+    public void setNextScreen(Screen screen){
+        if (screen != null)
+            game.setScreen(screen);
+    }
 
     public void addWindow(Window window){
         if (window != null){

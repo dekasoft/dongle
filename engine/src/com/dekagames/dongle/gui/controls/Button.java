@@ -5,7 +5,10 @@ import com.dekagames.dongle.Sprite;
 import com.dekagames.dongle.Texture;
 import com.dekagames.dongle.gui.Control;
 import com.dekagames.dongle.gui.Window;
+import com.dekagames.slon.Slon;
 import com.dekagames.slon.SlonNode;
+
+import java.io.IOException;
 
 /** Basic button class. Any button may have up to three stages: unpressed, pressed, unabled.
  */
@@ -59,6 +62,36 @@ public class Button extends Control{
         fheight = sprite.getFrameHeight(0);
         enabled = true;
     }
+
+
+    /**
+     * Create the button from the atlas node. This method is using for loading
+     * button sprite from the texture atlas, made with TexturePacker tool. Button has that number of stages
+     * that frames in sprite node.
+     * @param tex texture atlas create by TexturePacker.
+     * @param atlas Slon atlas in which button node contains in "sprites" section
+     * @param name button node name in atlas.
+     * @param x X position of the button, relatively of the upper left corner of the parent window
+     * @param y Y position of the button, relatively of the upper left corner of the parent window
+     */
+    public Button(Texture tex, Slon atlas, String name, float x, float y){
+        super();
+        try {
+            sprite = new Sprite(tex,atlas,name,1);
+            n_stages = sprite.getFramesCount();
+            if (n_stages<=0) 	n_stages = 1;
+            if (n_stages>3) 	n_stages = 3;
+            fx = x;
+            fy = y;
+            fwidth = sprite.getFrameWidth(0);
+            fheight = sprite.getFrameHeight(0);
+            enabled = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
     /**
      * Draw the button on the window. This method is invoked by window, and usually no need to call it manually.

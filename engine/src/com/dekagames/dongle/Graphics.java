@@ -289,5 +289,10 @@ public abstract class Graphics {
 
 
     public abstract Texture createTexture(String filepath);
-    public abstract void deleteTexture(Texture texture);
+    public void deleteTexture(Texture texture){
+        gl.glBindTexture(GLCommon.GL_TEXTURE_2D, texture.textureId);
+        int[] texureIds = {texture.textureId};
+        gl.glDeleteTextures(1,texureIds,0);
+        game.getManagedTextures().remove(texture);
+    }
 }

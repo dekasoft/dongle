@@ -19,6 +19,10 @@ public class Image extends Control {
         }
     }
 
+    public Sprite getSprite(){
+        return sprite;
+    }
+
     public void setPosition(float x, float y){
         fx = x;
         fy = y;
@@ -27,7 +31,7 @@ public class Image extends Control {
     @Override
     public void draw(Graphics graphics) {
         if (sprite != null)
-            sprite.draw(graphics, fx, fy);
+            sprite.draw(graphics, fx+parent.getLeft(), fy+parent.getTop());
     }
 
     @Override

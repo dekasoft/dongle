@@ -40,13 +40,13 @@ public class JoglGraphics extends Graphics{
         return texture;
     }
 
-    @Override
-    public void deleteTexture(Texture texture) {
-        gl.glBindTexture(GLCommon.GL_TEXTURE_2D, texture.textureId);
-        int[] texureIds = {texture.textureId};
-        gl.glDeleteTextures(1,texureIds,0);
-        game.getManagedTextures().remove(texture);
-    }
+//    @Override
+//    public void deleteTexture(Texture texture) {
+//        gl.glBindTexture(GLCommon.GL_TEXTURE_2D, texture.textureId);
+//        int[] texureIds = {texture.textureId};
+//        gl.glDeleteTextures(1,texureIds,0);
+//        game.getManagedTextures().remove(texture);
+//    }
 
 
     @Override

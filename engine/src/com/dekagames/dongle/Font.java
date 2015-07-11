@@ -169,15 +169,15 @@ public class Font {
             Character c = text.charAt(i);
 
             if (c.equals(' ')){
-                tempX += spaceWidth;
+                tempX += spaceWidth * scale_;
                 continue;
             } else {
                 Glyph g = glyphMap.get(c);
                 if (g != null) {
                     draw_glyph(graphics, g, tempX, y);//+g.origy);
-                    tempX += g.advance;
+                    tempX += scale_ * g.advance;
                 } else {
-                    tempX += spaceWidth;
+                    tempX += spaceWidth * scale_;
                 }
 
             }

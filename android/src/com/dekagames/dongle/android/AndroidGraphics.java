@@ -51,13 +51,13 @@ public class AndroidGraphics  extends Graphics {
     }
 
 
-    @Override
-    public void deleteTexture(Texture texture){
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture.textureId);
-        int[] texureIds = {texture.textureId};
-        GLES20.glDeleteTextures(1,texureIds,0);
-        game.getManagedTextures().remove(texture);
-    }
+//    @Override
+//    public void deleteTexture(Texture texture){
+//        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture.textureId);
+//        int[] texureIds = {texture.textureId};
+//        GLES20.glDeleteTextures(1,texureIds,0);
+//        game.getManagedTextures().remove(texture);
+//    }
 
 
     @Override

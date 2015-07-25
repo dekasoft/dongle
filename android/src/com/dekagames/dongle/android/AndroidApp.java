@@ -131,6 +131,7 @@ public class AndroidApp extends Activity implements Application, GLSurfaceView.R
         glView.onResume();
         // game.resume вызывается в onSurfaceCreated. Тут не нужно.
         //        if (game != null)   game.resume();
+
         wakeLock.acquire();
         gameState = GameState.RUNNING;
     }
@@ -153,7 +154,10 @@ public class AndroidApp extends Activity implements Application, GLSurfaceView.R
         wakeLock.release();
         glView.onPause();
 
-        if (game != null)    game.pause();
+        if (game != null) {
+            game.pause();
+            game.setNeedToReloadTextures(true);
+        }
         super.onPause();
     }
 
@@ -165,13 +169,12 @@ public class AndroidApp extends Activity implements Application, GLSurfaceView.R
         // запишем модуль для работы с графикой
         game.graphics = new AndroidGraphics(game);
 
-        synchronized(stateMonitor){
-            game.initialize();
-            game.resume();
-
-            startTime = System.nanoTime();
-//            gameState = GameState.RUNNING;
-        }
+//        synchronized(stateMonitor){
+//            game.initialize();
+//            game.resume();
+//
+//            startTime = System.nanoTime();
+//        }
 
     }
 
@@ -180,7 +183,14 @@ public class AndroidApp extends Activity implements Application, GLSurfaceView.R
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         Log.info("AndroidApp onSurfaceChanged called. W="+width+"; H="+height+";");
         if (game != null) {
+            synchronized(stateMonitor){
+                game.initialize();
+                game.resume();
+
+                startTime = System.nanoTime();
+            }
             game.graphics.init(width, height);
+
         }
         else
             Log.info("game = null!!!!");

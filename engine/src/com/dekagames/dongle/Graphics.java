@@ -177,8 +177,7 @@ public abstract class Graphics {
 
         // для прозрачности разные установки для платформ хз почему
         gl.glEnable(GL_BLEND);
-//        gl.glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA); // !!!!!!       // for android
-//        gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // !!!!!! // for desktop
+        gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // !!!!!! // for desktop
 
 
         // Устанавливаем viewport  в соответствии с виртуальным экраном.
@@ -214,7 +213,13 @@ public abstract class Graphics {
         // перезагрузим текстуры
         // восстановим текстуры при создании поверхности - это происходит в самом начале, при запуске игры
         // и при паузе-возобновлении
-        game.reloadTextures();
+        if (game != null) {
+            if (game.getNeedToReloadTextures()) {
+                game.reloadTextures();
+                game.setNeedToReloadTextures(false);
+
+            }
+        }
     }
 
 
@@ -289,6 +294,8 @@ public abstract class Graphics {
 
 
     public abstract Texture createTexture(String filepath);
+
+
     public void deleteTexture(Texture texture){
         gl.glBindTexture(GLCommon.GL_TEXTURE_2D, texture.textureId);
         int[] texureIds = {texture.textureId};

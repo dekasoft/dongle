@@ -17,6 +17,9 @@ public class MainScreen extends Screen {
     // слон файл
     public Slon slon;
 
+    // текстура с одиночной картинкой
+    private Texture texLogo;
+
     // текстура с полоской кадров - 1 способ
     private Texture texAngelStrip;
 
@@ -30,7 +33,7 @@ public class MainScreen extends Screen {
     private SkeletonModel model;
 
     // разные спрайты для разных способов загрузки
-    private Sprite  sprAngelStrip, spriteFromAtlas;
+    private Sprite  sprAngelStrip, spriteFromAtlas, spriteLogo;
 
 
     // GUI window - needed for gui elements
@@ -70,6 +73,11 @@ public class MainScreen extends Screen {
     public boolean initialize(){
         // вся работа с input должна делаться в потоке GL
         getGame().input.catchBackKey = true;
+
+        // текстура с одиночной картинкой
+        texLogo = getGame().graphics.createTexture("logo.png");
+        spriteLogo = new Sprite(texLogo, 1, 1, 0, 0, 256, 128);
+        spriteLogo.fadeInOut(0.5f, 2.5f, 0.5f, 0);
 
         // ----------  1 способ - загрузка текстуры с полоской кадров -----------------------
         texAngelStrip = getGame().graphics.createTexture("angel.png");
@@ -136,6 +144,7 @@ public class MainScreen extends Screen {
         if (lastKeyUp == Input.BACK)
             System.out.println("BAck button up!");
 
+        spriteLogo.update(deltaTime);
         sprAngelStrip.update(deltaTime);
         spriteFromAtlas.update(deltaTime);
 
@@ -150,6 +159,9 @@ public class MainScreen extends Screen {
 
         // весь вывод графики должен предворяться begin
         gr.begin();
+
+        // появляющееся и исчезающее лого
+        spriteLogo.draw(gr, 300, 300);
 
         //выводим спрайт созданный из полоски
         sprAngelStrip.setARGBColor(0xFEFDFCFB);

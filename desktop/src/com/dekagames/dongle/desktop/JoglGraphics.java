@@ -40,21 +40,6 @@ public class JoglGraphics extends Graphics{
         return texture;
     }
 
-//    @Override
-//    public void deleteTexture(Texture texture) {
-//        gl.glBindTexture(GLCommon.GL_TEXTURE_2D, texture.textureId);
-//        int[] texureIds = {texture.textureId};
-//        gl.glDeleteTextures(1,texureIds,0);
-//        game.getManagedTextures().remove(texture);
-//    }
-
-
-    @Override
-    public void init(int physical_width, int physical_height){
-        super.init(physical_width, physical_height);
-        gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // !!!!!!       // for desktop
-    }
-
 
     @Override
     protected void reload_texture_from_file(Texture texture) {

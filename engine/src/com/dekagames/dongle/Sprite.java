@@ -502,6 +502,7 @@ public class Sprite {
                     is_fade_in = false;
                     is_fade_out = false;
                     full_fade_time = stay_time;
+                    current_fade_time = 0;
                     fade_alpha = 1;
                 }
 
@@ -511,7 +512,7 @@ public class Sprite {
                     if (fade_loop || (current_fade_iteration < fade_repeat_count))
                         fadeIn(in_time);
 
-                    else {                      // прекратим составной шейдер
+                    else {                      // прекратим составной фэйдер
                         is_fade_inout = false;
                         is_fade_in = false;
                         is_fade_out = false;

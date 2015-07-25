@@ -30,15 +30,25 @@ public class Game {
 
     // список текстур. конструктор текстуры добавляет сюда создаваемые текстуры, чьтобы потом можно было их перезагрузить
     // в случае потери контекста
-    protected ArrayList<Texture> managedTextures;
-    protected   boolean            needToReloadTextures;
+    protected ArrayList<Texture>    managedTextures;
+    protected   boolean             needToReloadTextures;
 
     public Game(int virtual_width, int virtual_height){
         virtualWidth = virtual_width;
         virtualHeight = virtual_height;
 
         managedTextures = new ArrayList<Texture>();
-        needToReloadTextures = true;
+//        needToReloadTextures = true;
+    }
+
+
+    public void setNeedToReloadTextures(boolean need_reload){
+        needToReloadTextures = need_reload;
+    }
+
+
+    public boolean getNeedToReloadTextures(){
+        return needToReloadTextures;
     }
 
 

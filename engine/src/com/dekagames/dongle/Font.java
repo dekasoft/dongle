@@ -184,6 +184,34 @@ public class Font {
         }
     }
 
+
+    // рисуем строку, отцентрированную по горизонтали около точки с координатами x.y
+    public void drawCaption(Graphics graphics, String text, float x, float y){
+        float tempX=x;  // текущая координата origin
+        float strWidth=0;
+
+
+        // сначала вычислим длину строки
+        for (int i=0; i<text.length(); i++){
+            Character c = text.charAt(i);
+
+            if (c.equals(' ')){
+                strWidth += spaceWidth * scale_;
+                continue;
+            } else {
+                Glyph g = glyphMap.get(c);
+                if (g != null)
+                    strWidth += scale_ * g.advance;
+                else
+                    strWidth += spaceWidth * scale_;
+            }
+        }
+
+        // нарисуем строку
+        drawString(graphics,text, x-strWidth/2, y);
+    }
+
+
     public void setColor (float r, float g, float b, float a) {
         vertices[R1] = vertices[R2] = vertices[R3] = vertices[R4] = vertices[R5] = vertices[R6] = r;
         vertices[G1] = vertices[G2] = vertices[G3] = vertices[G4] = vertices[G5] = vertices[G6] = g;

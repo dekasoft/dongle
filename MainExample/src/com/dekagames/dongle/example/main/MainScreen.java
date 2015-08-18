@@ -1,11 +1,8 @@
 package com.dekagames.dongle.example.main;
 
 import com.dekagames.dongle.*;
-import com.dekagames.dongle.gui.Control;
-import com.dekagames.dongle.gui.controls.Button;
 import com.dekagames.slon.Slon;
 import com.dekagames.slon.SlonException;
-import com.dekagames.slon.SlonNode;
 
 import java.io.IOException;
 import java.util.Random;
@@ -200,9 +197,9 @@ public class MainScreen extends Screen {
         Primitives.drawPolygon(gr, vert);
 
         // обработка ввода
-        if (getGame().input.wasTouched){
+        if (getGame().input.was_touched){
             sound.play();
-            getGame().input.wasTouched = false;
+            getGame().input.was_touched = false;
         }
 
 

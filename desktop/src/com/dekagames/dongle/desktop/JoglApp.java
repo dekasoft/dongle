@@ -41,8 +41,7 @@ public class JoglApp implements Application, GLEventListener, KeyListener, Mouse
         game.fileIO = fio;
 
         // модуль работы со вводом (тачскрин и акселерометр)
-        JoglInput input = new JoglInput();
-        game.input = input;
+        game.input = new JoglInput();
 
         // модуль работы со звуком
         game.audio = new JoglAudio(fio);
@@ -101,8 +100,8 @@ public class JoglApp implements Application, GLEventListener, KeyListener, Mouse
             game.draw();
 //            // обнулим последние события тачей
 //            synchronized(game.input){
-//                game.input.wasTouched = false;
-//                game.input.wasUntouched = false;
+//                game.input.was_touched = false;
+//                game.input.was_untouched = false;
 //            }
         }
     }
@@ -151,7 +150,7 @@ public class JoglApp implements Application, GLEventListener, KeyListener, Mouse
             synchronized (game.input) {
                 game.input.buttoned[0] = true;
                 game.input.touched[0] = true;
-                game.input.wasTouched = true;
+                game.input.was_touched = true;
             }
         }
         if (e.getButton() == 3)                 // правая кнопка
@@ -168,7 +167,7 @@ public class JoglApp implements Application, GLEventListener, KeyListener, Mouse
             synchronized (game.input) {
                 game.input.buttoned[0] = false;
                 game.input.touched[0] = false;
-                game.input.wasUntouched = true;
+                game.input.was_untouched = true;
             }
         }
         if (e.getButton() == 3)                     // правая кнопка

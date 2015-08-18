@@ -1,7 +1,7 @@
 package com.dekagames.dongle;
 
 /**
- * Created by Deka on 23.04.2014.
+ * Примитивный класс для удобства хранения координат. Часто требуется в 2D играх.
  */
 public class Point {
     public float x;

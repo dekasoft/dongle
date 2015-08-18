@@ -141,8 +141,8 @@ public class Window {
         for (Control ctrl:controls) {
             if (ctrl.isPointIn(x,y)){
                 // if click was in control's area - clear touched flags
-                screen.getGame().input.wasUntouched = false;
-                screen.getGame().input.wasTouched = false;
+                screen.getGame().input.was_untouched = false;
+                screen.getGame().input.was_touched = false;
                 ctrl.controlTouched(down);
 //                is_any_control_pressed |= down;
             }

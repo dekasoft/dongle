@@ -311,7 +311,7 @@ public class AndroidInput extends Input implements OnTouchListener, SensorEventL
                     touchY[pointerId_] = y;
                     touched[pointerId_] = true;
                     if (pointerId_ == 0)
-                        wasTouched = true;
+                        was_touched = true;
                     break;
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_POINTER_UP:
@@ -320,7 +320,7 @@ public class AndroidInput extends Input implements OnTouchListener, SensorEventL
                     touchY[pointerId_] = y;
                     touched[pointerId_] = false;
                     if (pointerId_ == 0)
-                        wasUntouched = true;
+                        was_untouched = true;
                     break;
                 case MotionEvent.ACTION_MOVE:
                     // из-за глюков переполучим pointerId

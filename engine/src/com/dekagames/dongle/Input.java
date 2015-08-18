@@ -31,13 +31,15 @@ public abstract class Input {
     // коды последней нажатой и последней отжатой клавиши. при считывании стираются
     public int lastKeyUp, lastKeyDown;
 
-    /** Флаг, показывающий что с момента обнуления его произошло событие касания
-     * нулевого указателя (единственного/последнего пальца или левой кнопки мыши). Требует ручного обнуления */
-    public boolean wasTouched;
+    /**
+     * Флаг, показывающий что с момента обнуления его произошло событие касания
+     * нулевого указателя (единственного/последнего пальца или левой кнопки мыши). Требует ручного обнуления
+     */
+    public boolean was_touched;
 
     /** Флаг, показывающий что с момента обнуления его произошло событие отпускания
      * нулевого указателя (единственного/последнего пальца или левой кнопки мыши). Требует ручного обнуления */
-    public boolean wasUntouched;
+    public boolean was_untouched;
 
     // кнопки мыши
     public class Buttons {
@@ -131,6 +133,20 @@ public abstract class Input {
         return k;
     }
 
+
+    // методы, при вызове которых происходит сброс флагов о произошедших тачах/антачах
+    public boolean wasTouched(){
+        boolean b = was_touched;
+        was_touched = false;
+        return b;
+    }
+
+
+    public boolean wasUnTouched(){
+        boolean b = was_untouched;
+        was_untouched = false;
+        return b;
+    }
 
 
     public static int ANY_KEY;

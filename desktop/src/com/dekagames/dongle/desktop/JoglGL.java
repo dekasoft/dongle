@@ -402,7 +402,8 @@ public class JoglGL implements GLCommon {
 
     @Override
     public void glUniform1f(int location, float x) {
-
+        gl.glUniform1f(location, x);
+        int error = gl.glGetError();
     }
 
     @Override
@@ -422,7 +423,7 @@ public class JoglGL implements GLCommon {
 
     @Override
     public void glUniform2f(int location, float x, float y) {
-
+        gl.glUniform2f(location, x, y);
     }
 
     @Override

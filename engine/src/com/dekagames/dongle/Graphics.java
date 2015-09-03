@@ -1,5 +1,6 @@
 package com.dekagames.dongle;
 
+import java.io.InputStream;
 import java.nio.*;
 
 import static com.dekagames.dongle.GLCommon.*;
@@ -38,8 +39,8 @@ public abstract class Graphics {
 
     protected GLCommon gl;                      // интерфейс для обращения к функиям OpenGL
 
-    protected   Shader shaderForSprites;          // стандартный шейдер для вывода текстурных объектов
-    protected   Shader shaderForPrimitives;       // standart shader for primitives
+    private     Shader shaderForSprites;          // стандартный шейдер для вывода текстурных объектов
+    private     Shader shaderForPrimitives;       // standart shader for primitives
 
     protected   FloatBuffer vertexBuffer;       // буффер с прорисовываемыми вершинами
 
@@ -48,23 +49,25 @@ public abstract class Graphics {
     protected   int maxSpritesAmount;           // сколько максимум спрайтов рисуется за один проход
     public      int physicalWidth, physicalHeight;
 
-    public static float SCALE;                    // коэффициент трансформации виртуального разрешения в реальное
-    public static int XOFFSET, YOFFSET;           // смещение картинки относительно левоговерхнего угла из-за разного соотношения сторон
-    protected   int viewportWidth, viewportHeight;  //реальная ширина и высота viewport-a
+    public static float SCALE;                  // коэффициент трансформации виртуального разрешения в реальное
+    public static int XOFFSET, YOFFSET;         // смещение картинки относительно левого верхнего угла из-за разного соотношения сторон
+    public static float BOTTOM_OFFSET;          // смещение низа картинки
+
+    private int viewportWidth, viewportHeight;    //реальная ширина и высота viewport-a
 
     private Texture currentTexture;
-    private boolean isFirstDrawCall=true;
+    private Shader currentShader;
+    private boolean isFirstDrawCall;
 
     // матрицы
-    protected float[] projectionMatrix = new float[16];
-    protected float[] viewModelMatrix = new float[16];                  // произведение матриц вида и модели
-    protected float[] mpvMatrix = new float[16];
+    protected float[] projectionMatrix = new float[16];     // матрица проекции
+    protected float[] viewModelMatrix = new float[16];      // произведение матриц вида и модели
+    protected float[] mpvMatrix = new float[16];            // произведение матриц вида, модели и проекции
 
 
     public Graphics(Game game){
         this.game = game;
-
-//        shaderForSprites = null;
+        isFirstDrawCall = true;
 
         // подготовим массив вершин
         vertexBuffer = ByteBuffer.
@@ -77,6 +80,17 @@ public abstract class Graphics {
     public  GLCommon getGl(){
         return gl;
     }
+
+
+    public int getViewportWidth(){return viewportWidth;}
+
+
+    public int getViewportHeight() {return viewportHeight;}
+
+
+//    public Game getGame(){
+//        return game;
+//    }
 
 
     public final void clearScreen(float r, float g, float b){
@@ -94,6 +108,83 @@ public abstract class Graphics {
     }
 
 
+    public void init(int physical_width, int physical_height){
+        Log.info("Game graphics.init("+physical_width+", "+physical_height+") called");
+        physicalWidth = physical_width;
+        physicalHeight = physical_height;
+
+        // определим как вытянут экран и коэффициент растяжения
+        float virtRatio = (float)game.getVirtualWidth()/(float)game.getVirtualHeight();
+        float realRatio = (float)physical_width/(float)physical_height;
+        if (realRatio>virtRatio){ // экран вытянут по ширине - будут полоски слева и справа
+            SCALE = (float)physical_height/(float)game.getVirtualHeight();
+            YOFFSET = 0;
+            BOTTOM_OFFSET = 0;
+            XOFFSET = Math.round(physical_width - SCALE*game.getVirtualWidth())/2;
+        }
+        else {  // экран вытянут по высоте - будут полоски сверху и снизу
+            SCALE = (float)physical_width/(float)game.getVirtualWidth();
+            XOFFSET = 0;
+            YOFFSET = Math.round(physical_height - SCALE*game.getVirtualHeight())/2;
+            BOTTOM_OFFSET = YOFFSET;
+        }
+
+        viewportWidth = Math.round(SCALE*game.getVirtualWidth());
+        viewportHeight= Math.round(SCALE*game.getVirtualHeight());
+
+        gl.glDisable(GL_DEPTH_TEST);
+        gl.glDisable(GL_LIGHTING);
+        gl.glDisable(GL_SCISSOR_TEST);
+
+        // для прозрачности разные установки для платформ хз почему
+        gl.glEnable(GL_BLEND);
+        gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // !!!!!! // for desktop
+
+        // Устанавливаем viewport  в соответствии с виртуальным экраном.
+        gl.glViewport(XOFFSET, YOFFSET, viewportWidth, viewportHeight);
+
+        // получим произведение матриц вида и модели. они используются совместно всегда
+        init_view_model_matrix();
+
+        // Создаем новую матрицу проекции. Ортогональную.
+        final float left = 0;
+        final float right = game.getVirtualWidth();
+        final float bottom = game.getVirtualHeight();   // так как стоим ровно, то верх и низ просто меняем местами - чтобы
+        final float top = 0;                            // координата Y на экране была направлена вниз
+        final float near = 2.0f;
+        final float far = -2.0f;
+        Matrix.orthoM(projectionMatrix, 0, left, right, bottom, top, near, far);
+
+        // Перемножаем матрицу модели*вида на матрицу проекции, сохраняем в MVP матрицу.
+        // (которая теперь содержит модель*вид*проекцию).
+        Matrix.multiplyMM(mpvMatrix, 0, projectionMatrix, 0, viewModelMatrix, 0);
+
+
+        // создаем два дефолтных шейдера - один для спрайтов, другой для простых примитивов
+        shaderForSprites = createShader(Shader.DEFAULT_VERTEX_SHADER, Shader.DEFAULT_FRAGMENT_SHADER);
+        shaderForPrimitives = createShader(Shader.PRIMITIVE_VERTEX_SHADER, Shader.PRIMITIVE_FRAGMENT_SHADER);
+
+        // send MPV matrix to both shaders
+        // before we send uniform to shader we MUST enable shader by glUseProgram command!!!
+        gl.glUseProgram(shaderForSprites.getProgramId());
+        gl.glUniformMatrix4fv(shaderForSprites.mpvMatrixUniformLocation, 1, false, mpvMatrix, 0);
+        gl.glUseProgram(shaderForPrimitives.getProgramId());
+        gl.glUniformMatrix4fv(shaderForPrimitives.mpvMatrixUniformLocation, 1, false, mpvMatrix, 0);
+
+        // перезагрузим текстуры
+        // восстановим текстуры при создании поверхности - это происходит в самом начале, при запуске игрыы
+        // и при паузе-возобновлении
+        if (game != null) {
+            if (game.getNeedToReloadTextures()) {
+                game.reloadTextures();
+                game.setNeedToReloadTextures(false);
+
+            }
+        }
+    }
+
+
+
     public final void begin(){
         maxSpritesAmount = MAX_SPRITES_DEFAULT;
         vertexBuffer.position(0);
@@ -103,31 +194,33 @@ public abstract class Graphics {
     public final void end(){
         // we always send ALL data to ANY shader. e.g. we send texture data to primitives shader too.
         // texture's uniforms in primitive's shader are NOT exist, thus its location variables is -1.
+        if (currentShader == null){
+            if (currentTexture == null)
+                currentShader = shaderForPrimitives;
+            else
+                currentShader = shaderForSprites;
+        }
 
-        Shader shader;
+        gl.glUseProgram(currentShader.getProgramId());
 
-        if (currentTexture == null)
-            shader = shaderForPrimitives;
-        else
-            shader = shaderForSprites;
-
-        useShader(shader);
         vertexBuffer.rewind();
+        // значения позиции и цвета передаются в любой шейдер
+
         // Передаем значения о расположении.
         vertexBuffer.position(POSITION_OFFSET);
-        gl.glVertexAttribPointer(shader.positionAttrLocation, POSITION_SIZE, GL_FLOAT, false, STRIDE, vertexBuffer);
-        gl.glEnableVertexAttribArray(shader.positionAttrLocation);
+        gl.glVertexAttribPointer(currentShader.positionAttrLocation, POSITION_SIZE, GL_FLOAT, false, STRIDE, vertexBuffer);
+        gl.glEnableVertexAttribArray(currentShader.positionAttrLocation);
 
         // Передаем значения о цвете.
         vertexBuffer.position(COLOR_OFFSET);
-        gl.glVertexAttribPointer(shader.colorAttrLocation, COLOR_SIZE, GL_FLOAT, false, STRIDE, vertexBuffer);
-        gl.glEnableVertexAttribArray(shader.colorAttrLocation);
+        gl.glVertexAttribPointer(currentShader.colorAttrLocation, COLOR_SIZE, GL_FLOAT, false, STRIDE, vertexBuffer);
+        gl.glEnableVertexAttribArray(currentShader.colorAttrLocation);
 
-        if (shader.getKind() != Shader.DEFAULT_FOR_PRIMITIVES) {
+        if (currentTexture != null) { //shader.getKind() != Shader.DEFAULT_FOR_PRIMITIVES) {
             // Передаем значения о текстурных координатах.
             vertexBuffer.position(TEX_COORD_OFFSET);
-            gl.glVertexAttribPointer(shader.texCoordAttrLocation, TEX_COORD_SIZE, GL_FLOAT, false, STRIDE, vertexBuffer);
-            gl.glEnableVertexAttribArray(shader.texCoordAttrLocation);
+            gl.glVertexAttribPointer(currentShader.texCoordAttrLocation, TEX_COORD_SIZE, GL_FLOAT, false, STRIDE, vertexBuffer);
+            gl.glEnableVertexAttribArray(currentShader.texCoordAttrLocation);
         }
 
         // непосредственно рисуем все что накопилось в буфере
@@ -144,87 +237,32 @@ public abstract class Graphics {
     }
 
 
+    /**
+     * Устанавливаем текущий шейдер для отрисовки. Если shader равен null, значит используется
+     * шейдер по умолчанию.
+     * @param shader
+     */
     public void useShader(Shader shader){
-        gl.glUseProgram(shader.getProgramId());
-    }
+        if (shader == currentShader)
+            return;
 
-
-    public void init(int physical_width, int physical_height){
-        Log.info("Game graphics.init("+physical_width+", "+physical_height+") called");
-        physicalWidth = physical_width;
-        physicalHeight = physical_height;
-
-        // определим как вытянут экран и коэффициент растяжения
-        float virtRatio = (float)game.getVirtualWidth()/(float)game.getVirtualHeight();
-        float realRatio = (float)physical_width/(float)physical_height;
-        if (realRatio>virtRatio){ // экран вытянут по ширине - будут полоски слева и справа
-            SCALE = (float)physical_height/(float)game.getVirtualHeight();
-            YOFFSET = 0;
-            XOFFSET = Math.round(physical_width - SCALE*game.getVirtualWidth())/2;
-        }
-        else {  // экран вытянут по высоте - будут полоски сверху и снизу
-            SCALE = (float)physical_width/(float)game.getVirtualWidth();
-            XOFFSET = 0;
-            YOFFSET = Math.round(physical_height - SCALE*game.getVirtualHeight())/2;
+        if (!isFirstDrawCall) {
+            end();
+            begin();
         }
 
-        viewportWidth = Math.round(SCALE*game.getVirtualWidth());
-        viewportHeight= Math.round(SCALE*game.getVirtualHeight());
-
-        gl.glDisable(GL_DEPTH_TEST);
-        gl.glDisable(GL_LIGHTING);
-        gl.glDisable(GL_SCISSOR_TEST);
-
-        // для прозрачности разные установки для платформ хз почему
-        gl.glEnable(GL_BLEND);
-        gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // !!!!!! // for desktop
-
-
-        // Устанавливаем viewport  в соответствии с виртуальным экраном.
-        gl.glViewport(XOFFSET, YOFFSET, viewportWidth, viewportHeight);
-
-        set_view_model_matrix();
-
-        // Создаем новую матрицу проекции. Ортогональную.
-        final float left = 0;
-        final float right = game.getVirtualWidth();
-        final float bottom = game.getVirtualHeight();   // так как стоим ровно, то верх и низ просто меняем местами - чтобы
-        final float top = 0;                            // координата Y на экране была направлена вниз
-        final float near = 2.0f;
-        final float far = -2.0f;
-        Matrix.orthoM(projectionMatrix, 0, left, right, bottom, top, near, far);
-
-        // Перемножаем матрицу модели*вида на матрицу проекции, сохраняем в MVP матрицу.
-        // (которая теперь содержит модель*вид*проекцию).
-        Matrix.multiplyMM(mpvMatrix, 0, projectionMatrix, 0, viewModelMatrix, 0);
-
-
-        // create two default shaders - one for sprites, and another one for primitives
-        shaderForSprites = new Shader(this, Shader.DEFAULT_FOR_SPRITES);
-        shaderForPrimitives = new Shader(this, Shader.DEFAULT_FOR_PRIMITIVES);
-
-        // send MPV matrix to both shaders
-        // before we send uniform to shader we MUST enable shader by useShader command!!!
-        useShader(shaderForSprites);
-        gl.glUniformMatrix4fv(shaderForSprites.mpvMatrixUniformLocation, 1, false, mpvMatrix, 0);
-        useShader(shaderForPrimitives);
-        gl.glUniformMatrix4fv(shaderForPrimitives.mpvMatrixUniformLocation, 1, false, mpvMatrix, 0);
-
-        // перезагрузим текстуры
-        // восстановим текстуры при создании поверхности - это происходит в самом начале, при запуске игры
-        // и при паузе-возобновлении
-        if (game != null) {
-            if (game.getNeedToReloadTextures()) {
-                game.reloadTextures();
-                game.setNeedToReloadTextures(false);
-
-            }
+        // если шейдер свой - сразу загрузим ему mpv матрицу - она неизменна
+        // в шейдеры по умолчанию она уже загружена при инициализации графики
+        if (shader != null){
+            gl.glUseProgram(shader.getProgramId());
+            gl.glUniformMatrix4fv(shader.mpvMatrixUniformLocation, 1, false, mpvMatrix, 0);
         }
+        currentShader = shader;
     }
 
 
     // устанавливает произведение матриц вида и модели
-    protected void set_view_model_matrix(){
+    private void init_view_model_matrix(){
         float[] viewMatrix = new float[16];
         float[] modelMatrix = new float[16];
 
@@ -265,11 +303,14 @@ public abstract class Graphics {
                 begin();
             }
             currentTexture = texture;
-            // Передаем текстуру
+            // Передаем текстуру в шейдер
             if (currentTexture != null) {
-                gl.glActiveTexture(GLCommon.GL_TEXTURE0);                         // установим активный текстурный блок
-                gl.glBindTexture(GLCommon.GL_TEXTURE_2D, texture.textureId);      // установим активную текстуру
-                gl.glUniform1i(shaderForSprites.textureUniformLocation, 0);        // свяжем адрес униформы текстуры с номером акивного блока
+                gl.glActiveTexture(GLCommon.GL_TEXTURE0);                           // установим активный текстурный блок
+                gl.glBindTexture(GLCommon.GL_TEXTURE_2D, texture.textureId);        // установим активную текстуру
+                if (currentShader == null)                                          // шейдер по умолчанию
+                    gl.glUniform1i(shaderForSprites.textureUniformLocation, 0);        // свяжем адрес униформы текстуры с номером акивного блока
+                else                                                                // пользовательский шейдер
+                    gl.glUniform1i(currentShader.textureUniformLocation, 0);
             }
         }
         isFirstDrawCall = false;
@@ -295,6 +336,25 @@ public abstract class Graphics {
 
     public abstract Texture createTexture(String filepath);
 
+
+    public Shader createShader(InputStream is_vertex, InputStream is_fragment){
+        Shader sh = new Shader(this, is_vertex, is_fragment);
+        game.managedShaders.add(sh);
+        return sh;
+    }
+
+
+    public Shader createShader(String str_vertex, String str_fragment){
+        Shader sh = new Shader(this, str_vertex, str_fragment);
+        game.managedShaders.add(sh);
+        return sh;
+    }
+
+
+    public void deleteShader(Shader sh){
+        gl.glDeleteProgram(sh.getProgramId());
+        game.managedShaders.remove(sh);
+    }
 
     public void deleteTexture(Texture texture){
         gl.glBindTexture(GLCommon.GL_TEXTURE_2D, texture.textureId);

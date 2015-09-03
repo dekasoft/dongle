@@ -29,8 +29,14 @@ public class MainScreen extends Screen {
    // Скелетная модель
     private SkeletonModel model;
 
+    // Текстура для примера шейдера
+    private Texture texReed;
+    private Shader shader;
+
     // разные спрайты для разных способов загрузки
-    private Sprite  sprAngelStrip, spriteFromAtlas, spriteLogo;
+    private Sprite  sprAngelStrip, spriteFromAtlas, spriteLogo, sprReed;
+
+
 
 
     // GUI window - needed for gui elements
@@ -53,6 +59,8 @@ public class MainScreen extends Screen {
 
     private int lastKeyUp;
 
+    private float time;
+
 
     public MainScreen(MainGame mainGame){
         super(mainGame);
@@ -68,29 +76,31 @@ public class MainScreen extends Screen {
 
     @Override
     public boolean initialize(){
+        MainGame game = (MainGame)getGame();
+
         // вся работа с input должна делаться в потоке GL
-        getGame().input.catchBackKey = true;
+        game.input.catchBackKey = true;
 
         // текстура с одиночной картинкой
-        texLogo = getGame().graphics.createTexture("logo.png");
+        texLogo = game.graphics.createTexture("logo.png");
         spriteLogo = new Sprite(texLogo, 1, 1, 0, 0, 256, 128);
         spriteLogo.fadeInOut(0.5f, 2.5f, 0.5f, 0);
 
         // ----------  1 способ - загрузка текстуры с полоской кадров -----------------------
-        texAngelStrip = getGame().graphics.createTexture("angel.png");
+        texAngelStrip = game.graphics.createTexture("angel.png");
         // создание спрайта из полоски кадров
         sprAngelStrip = new Sprite(texAngelStrip,16,10,0,0,64,64);
         sprAngelStrip.play(true);       // запуск анимации
 
 
         // ----------  2 способ - загрузка текстуры с атласом кадров -----------------------
-        textureAtlas = getGame().graphics.createTexture("atlas.png");          // спрайт с кадрами упакованными в атлас
+        textureAtlas = game.graphics.createTexture("atlas.png");          // спрайт с кадрами упакованными в атлас
         // слон файл с параметрами атласа
         slon = new Slon();
         try {
             // слон файл для всего атласа - загружается один раз для всего атласа целиком и потом из него
             // дергаются отдельные спрайты
-            slon.load(getGame().fileIO.readAsset("atlas.png.atlas"));
+            slon.load(game.fileIO.readAsset("atlas.png.atlas"));
         } catch (SlonException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -105,16 +115,21 @@ public class MainScreen extends Screen {
 
 
         // ----------  2 способ - загрузка не спрайта, а скелетной модели -----------------------
-        textureModel = getGame().graphics.createTexture("hero.model.png");
+        textureModel = game.graphics.createTexture("hero.model.png");
         // скелетная модель содержит мини атлас всех своих костей, который, обычно, склеивается с  общим
         // атласом в качестве кадра спрайта, поэтому для загрузки модель использует не текстуру
         // а только область текстуры. В нашем тестовом примере мини-атлас модели хранится сам по себе, а не
         // в общем атласе, поэтому просто создадим TextureRegion из всей текстуры
         TextureRegion region = new TextureRegion(textureModel,0,0,textureModel.width, textureModel.height);
-        model = new SkeletonModel(getGame(), region, "hero.model", 10);
+        model = new SkeletonModel(game, region, "hero.model", 10);
         model.setFlip(true, false);     // отражение модели - просто для примера
         model.play(true);               // запуск анимации
 
+
+        // проверка шейдера
+        texReed = game.graphics.createTexture("reed.png");
+        sprReed = new Sprite(texReed, 1,1,0,0,128,128);
+        shader = game.graphics.createShader(game.fileIO.readAsset("vertex.glsl"), game.fileIO.readAsset("fragment.glsl"));
 
         // ------------------------  загрузка шрифта ----------------------------------------------------
         font = new Font(textureAtlas, slon, "fntComic");
@@ -147,6 +162,9 @@ public class MainScreen extends Screen {
 
         model.update(deltaTime);
         fangle += deltaTime*10;         // чтобы модель крутилась
+
+        time += deltaTime;
+        shader.setUniform("u_time", time);
     }
 
     @Override
@@ -175,7 +193,20 @@ public class MainScreen extends Screen {
 
 
         // рисуем скелетную модель
-        model.draw(gr, 400,200, fangle);
+        model.draw(gr, 400, 200, fangle);
+
+        //проверка шейдера
+        shader.setUniform("scr_h", (float) gr.getViewportHeight());
+        shader.setUniform("sprxy", new Point(600, 200));
+        shader.setUniform("sizexy", new Point(128,128));
+
+        shader.setUniform("yoffset", (float)Graphics.YOFFSET);
+        shader.setUniform("xoffset", (float)Graphics.XOFFSET);
+        shader.setUniform("scale", Graphics.SCALE);
+        gr.useShader(shader);
+        sprReed.draw(gr,600,200);
+        gr.useShader(null);
+        sprReed.draw(gr,600,100);
 
         // выведем FPS загруженным шрифтом
         font.setColor(1,0,0,1);

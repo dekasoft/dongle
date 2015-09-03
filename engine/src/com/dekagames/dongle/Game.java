@@ -28,9 +28,11 @@ public class Game {
 
     protected   Screen          screen;
 
-    // список текстур. конструктор текстуры добавляет сюда создаваемые текстуры, чьтобы потом можно было их перезагрузить
+    // список текстур. конструктор текстуры добавляет сюда создаваемые текстуры, чтобы потом можно было их перезагрузить
     // в случае потери контекста
     protected ArrayList<Texture>    managedTextures;
+    protected ArrayList<Shader>     managedShaders;
+
     protected   boolean             needToReloadTextures;
 
     public Game(int virtual_width, int virtual_height){
@@ -38,6 +40,7 @@ public class Game {
         virtualHeight = virtual_height;
 
         managedTextures = new ArrayList<Texture>();
+        managedShaders = new ArrayList<Shader>();
 //        needToReloadTextures = true;
     }
 
@@ -82,6 +85,16 @@ public class Game {
                 graphics.reload_texture_from_file(tex);//.reload_texture_from_file();
             }
         }
+
+        for (int i=0; i<managedShaders.size(); i++) {
+
+            Shader sh = managedShaders.get(i);
+            if (sh != null) {
+                Log.info("Reloading shader: " + sh.getProgramId());
+                sh.rebuild(graphics);
+            }
+        }
+
     }
 
 

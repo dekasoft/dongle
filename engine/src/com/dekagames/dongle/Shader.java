@@ -1,6 +1,9 @@
 package com.dekagames.dongle;
 
 
+import java.io.InputStream;
+import java.util.Scanner;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Deka
@@ -9,11 +12,6 @@ package com.dekagames.dongle;
  * To change this template use File | Settings | File Templates.
  */
 public class Shader {
-    public static final int DEFAULT_FOR_SPRITES = 1;
-    public static final int DEFAULT_FOR_PRIMITIVES = 2;
-    public static final int USER_SHADER = 3;
-
-
 
     // there are two groups of shaders: vertex/fragment shader for drawing primitives (without texturing,
     // color only) and vertex/fragment shader for drawing sprites (with textures)
@@ -47,10 +45,6 @@ public class Shader {
                     + "{                                        \n"
                     + " gl_FragColor = v_Color;                 \n"     // Передаем значения цветов.
                     + "}                                        \n";
-
-
-
-
 
 
     final static String DEFAULT_VERTEX_SHADER =
@@ -91,8 +85,8 @@ public class Shader {
                     + "}                                                        \n";
 
 
-    private boolean     is_default_shader;
-    private int         kindOfShader;
+//    private boolean     is_default_shader;
+//    private int         kindOfShader;
     private int         vertexShaderHandle;
     private int         fragmentShaderHandle;
     private int         shaderProgramHandle;
@@ -105,24 +99,34 @@ public class Shader {
     public int texCoordAttrLocation;           // то же для текстурных координат
 
 
-    public Shader(Graphics graphics, int kind){
-        kindOfShader = kind;
-        if (kind == DEFAULT_FOR_PRIMITIVES){
-            is_default_shader = true;
-            build(graphics.getGl(), PRIMITIVE_VERTEX_SHADER, PRIMITIVE_FRAGMENT_SHADER);
-        } else if (kind == DEFAULT_FOR_SPRITES){
-            is_default_shader = true;
-            build(graphics.getGl(), DEFAULT_VERTEX_SHADER, DEFAULT_FRAGMENT_SHADER);
-        } else {
+    // ВОЗМОЖНА ПОТЕРЯ ШЕЙДЕРА ПРИ ПОТЕРЕ КОНТЕКСТА GL
+    private Graphics graphics;
 
-        }
+    private String vertexShader, fragmentShader;
+
+
+    public Shader(Graphics gr, final String vertex_shader, final String fragment_shader){
+        vertexShader = vertex_shader;
+        fragmentShader = fragment_shader;
+
+        graphics = gr;
+        build(gr.getGl(), vertex_shader, fragment_shader);
     }
 
 
-    public int getKind(){
-        return kindOfShader;
+    public Shader(Graphics gr, InputStream is_vertex, InputStream is_fragment){
+        graphics = gr;
+        vertexShader = streamToString(is_vertex);
+        fragmentShader = streamToString(is_fragment);
+
+        build(gr.getGl(), vertexShader, fragmentShader);
     }
 
+
+    public void rebuild( Graphics gr){
+        graphics = gr;
+        build(gr.getGl(),vertexShader, fragmentShader);
+    }
 
     private void build(GLCommon gl, final String vertex_shader, final String fragment_shader){
         // Загрузка вершинного шейдера.
@@ -205,8 +209,40 @@ public class Shader {
     }
 
 
+    public void setUniform(String uniformName, float value){
+        graphics.getGl().glUseProgram(shaderProgramHandle);
+        int location = graphics.getGl().glGetUniformLocation(shaderProgramHandle,uniformName);
+        graphics.getGl().glUniform1f(location, value);
+    }
+
+
+    public void setUniform(String uniformName, int value){
+        graphics.getGl().glUseProgram(shaderProgramHandle);
+        int location = graphics.getGl().glGetUniformLocation(shaderProgramHandle,uniformName);
+        graphics.getGl().glUniform1i(location, value);
+    }
+
+
+    public void setUniform(String uniformName, Point point){
+        graphics.getGl().glUseProgram(shaderProgramHandle);
+        int location = graphics.getGl().glGetUniformLocation(shaderProgramHandle,uniformName);
+        graphics.getGl().glUniform2f(location, point.x, point.y);
+    }
+
+
     public int getProgramId(){
         return shaderProgramHandle;
+    }
+
+    // конвертируем поток в строку для
+    private String streamToString(InputStream is){
+        Scanner s = new Scanner(is);//.useDelimiter("\\A");
+        StringBuffer buf = new StringBuffer();
+        while (s.hasNext()){
+            buf.append(s.nextLine());
+            buf.append("\n");
+        }
+        return buf.toString();
     }
 }
 

@@ -23,7 +23,7 @@ public class MainScreen extends Screen {
     // текстура с атласом - 2 способ
     public Texture textureAtlas;
 
-    // Текстура для модели сделанной в скелетном редакторе
+    // Текстура для модели сделанной в скелетном редакторе / skeletal model
     private Texture textureModel;
 
    // Скелетная модель
